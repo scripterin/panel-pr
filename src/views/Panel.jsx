@@ -350,7 +350,7 @@ export default function Panel({ currentUser: initialUser, onLogout }) {
             {view === 'info'          && <InfoView infos={infos} isSef={isSef} isAdj={isAdj} currentUser={currentUser} onSave={saveInfo} onDelete={deleteInfo} />}
             {view === 'dovezi'        && <DoveziboardView currentUser={currentUser} isAdj={isAdj} isSef={isSef} />}
             {view === 'chat'          && <ChatView currentUser={currentUser} />}
-            {view === 'report'        && <ReportView members={members} activities={activities} warnings={warnings} promotions={promotions} />}
+            {view === 'report'        && <ReportView members={members} activities={activities} warnings={warnings} promotions={promotions} isAdj={isAdj} />}
             {view === 'sanctiuni'     && <SanctiuniView members={members} currentUser={currentUser} isAdj={isAdj} isSef={isSef} />}
             {view === 'promotions'    && <PromotionsView promotions={promotions} />}
             {view === 'ranks'         && <RanksView />}
