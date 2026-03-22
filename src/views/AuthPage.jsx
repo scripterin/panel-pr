@@ -180,7 +180,7 @@ export default function AuthPage({ onLogin }) {
     }
   }
 
-  const rc = { 'Supervizor PR': '#FDE047', 'Sef PR': 'var(--p3)', 'Adjunct PR': '#93C5FD', 'Membru PR': '#6EE7B7' };
+  const rc = { 'Supervizor PR': '#FDE047', 'Conducere Spital': '#2DD4BF', 'Sef PR': 'var(--p3)', 'Adjunct PR': '#93C5FD', 'Membru PR': '#6EE7B7' };
 
 return (
   <div className="auth-wrap">

@@ -136,6 +136,8 @@ function AddUpdateModal({ currentUser, onClose, onSave }) {
 export default function Dashboard({ members, activities, announcements, warnings, setView, setSelMember, currentUser, isSef }) {
   const total  = members.length;
   const activ  = members.filter(m => m.status === 'activ').length;
+  const sup    = members.filter(m => m.rank === 'Supervizor PR').length;
+  const cond   = members.filter(m => m.rank === 'Conducere Spital').length;
   const sef    = members.filter(m => m.rank === 'Sef PR').length;
   const adj    = members.filter(m => m.rank === 'Adjunct PR').length;
   const mem    = members.filter(m => m.rank === 'Membru PR').length;
@@ -285,6 +287,24 @@ export default function Dashboard({ members, activities, announcements, warnings
             </span>
           </div>
           <div style={{ padding: '16px 20px' }}>
+            <div className="prog-item">
+              <div className="prog-hdr">
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ color: '#FDE047', display: 'flex' }}>{Icons.star}</span> Supervizor PR
+                </span>
+                <span className="prog-v" style={{ color: '#FDE047' }}>{sup}</span>
+              </div>
+              <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(sup / maxB * 100) + '%', background: 'linear-gradient(90deg, #92400e, #FDE047)' }} /></div>
+            </div>
+            <div className="prog-item">
+              <div className="prog-hdr">
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+                  <span style={{ color: '#2DD4BF', display: 'flex' }}>{Icons.circle}</span> Conducere Spital
+                </span>
+                <span className="prog-v" style={{ color: '#2DD4BF' }}>{cond}</span>
+              </div>
+              <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(cond / maxB * 100) + '%', background: 'linear-gradient(90deg, #065f46, #2DD4BF)' }} /></div>
+            </div>
             <div className="prog-item">
               <div className="prog-hdr">
                 <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>

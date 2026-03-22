@@ -6,7 +6,7 @@ import RankBadge      from '../components/RankBadge';
 import StatusPill     from '../components/StatusPill';
 import AddMemberModal from '../components/AddMemberModal';
 
-const RANK_ORDER = ['Supervizor PR', 'Sef PR', 'Adjunct PR', 'Membru PR', 'Aspirant PR'];
+const RANK_ORDER = ['Supervizor PR', 'Sef PR', 'Conducere Spital', 'Adjunct PR', 'Membru PR', 'Aspirant PR'];
 function rankIndex(rank) { const idx = RANK_ORDER.indexOf(rank); return idx === -1 ? RANK_ORDER.length : idx; }
 
 function MemberAvatar({ member, size = 32, radius = '50%' }) {

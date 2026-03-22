@@ -43,6 +43,7 @@ export default function AddMemberModal({ onClose, onSave, editData }) {
               <select className="finput" value={form.rank} onChange={e => f('rank', e.target.value)}>
                 <option value="Supervizor PR">Supervizor PR</option>
                 <option value="Sef PR">Șef PR</option>
+                <option value="Conducere Spital">Conducere Spital</option>
                 <option value="Adjunct PR">Adjunct PR</option>
                 <option value="Membru PR">Membru PR</option>
                 <option value="Aspirant PR">Aspirant PR</option>

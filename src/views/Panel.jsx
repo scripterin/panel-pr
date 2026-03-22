@@ -100,7 +100,7 @@ export default function Panel({ currentUser: initialUser, onLogout }) {
   }, [initialUser?.id]);
 
   const isSef = currentUser.rank === 'Sef PR' || currentUser.rank === 'Supervizor PR';
-  const isAdj = currentUser.rank === 'Adjunct PR' || isSef;
+  const isAdj = currentUser.rank === 'Adjunct PR' || currentUser.rank === 'Conducere Spital' || isSef;
 
   useEffect(() => {
     function handleClick(e) {

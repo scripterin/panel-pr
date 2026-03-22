@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { getAll, COL } from '../utils/storage';
 
 const CODE_GROUPS = [
-  { label: '⭐ Coduri Supervizor PR', rank: 'Supervizor PR', color: '#FDE047'   },
-  { label: '👑 Coduri Șef PR',        rank: 'Sef PR',        color: 'var(--p3)' },
-  { label: '⚡ Coduri Adjunct PR',    rank: 'Adjunct PR',    color: '#93C5FD'   },
-  { label: '● Coduri Membru PR',      rank: 'Membru PR',     color: '#6EE7B7'   },
+  { label: '⭐ Coduri Supervizor PR',    rank: 'Supervizor PR',    color: '#FDE047'   },
+  { label: '👑 Coduri Șef PR',           rank: 'Sef PR',           color: 'var(--p3)' },
+  { label: '🏥 Coduri Conducere Spital', rank: 'Conducere Spital', color: '#2DD4BF'   },
+  { label: '⚡ Coduri Adjunct PR',       rank: 'Adjunct PR',       color: '#93C5FD'   },
+  { label: '● Coduri Membru PR',         rank: 'Membru PR',        color: '#6EE7B7'   },
 ];
 
 function ConfirmModal({ code, onConfirm, onCancel }) {
@@ -113,6 +114,7 @@ export default function CodesView({ onAdd, onDelete }) {
               <select className="finput" value={newRank} onChange={e => setNewRank(e.target.value)}>
                 <option value="Supervizor PR">Supervizor PR</option>
                 <option value="Sef PR">Șef PR</option>
+                <option value="Conducere Spital">Conducere Spital</option>
                 <option value="Adjunct PR">Adjunct PR</option>
                 <option value="Membru PR">Membru PR</option>
               </select>

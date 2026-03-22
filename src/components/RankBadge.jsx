@@ -32,18 +32,29 @@ function IconMember() {
   );
 }
 
-function IconAsp() {
+function IconHospital() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+      <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 14H8v-2h4v2zm0-4H8v-2h4v2zm4-4h-2v2h2v2h-2v2h-2v-2h-2v-2h2v-2H8V7h4V5h2v2h4v2z"/>
+    </svg>
+  );
+}
   return (
     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
       <circle cx="12" cy="12" r="10"/>
     </svg>
   );
-}
+
 
 export default function RankBadge({ rank }) {
   if (rank === 'Supervizor PR') return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(250,204,21,0.15)', color: '#FDE047', border: '1px solid rgba(250,204,21,0.35)' }}>
       <IconStar /> Supervizor PR
+    </span>
+  );
+  if (rank === 'Conducere Spital') return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(20,184,166,0.15)', color: '#2DD4BF', border: '1px solid rgba(20,184,166,0.35)' }}>
+      <IconHospital /> Conducere Spital
     </span>
   );
   if (rank === 'Sef PR') return (
