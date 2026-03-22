@@ -210,7 +210,7 @@ export default function Panel({ currentUser: initialUser, onLogout }) {
                 {item.section && <div className="sb-section">{item.section}</div>}
                 <div
                   className={`sb-item${(view === item.id || (isActiveMembersView && item.id === 'members')) ? ' active' : ''}`}
-                  onClick={() => { setView(item.id); if (item.id !== 'members') setSelMember(null); }}
+                  onClick={() => { setView(item.id); setSelMember(null); }}
                 >
                   <span className="sb-icon">
                     <span style={{
@@ -323,7 +323,7 @@ export default function Panel({ currentUser: initialUser, onLogout }) {
           </div>
 
           <div className="content-area">
-            {view === 'dashboard'     && <Dashboard members={members} activities={activities} announcements={announcements} warnings={warnings} setView={setView} setSelMember={setSelMember} currentUser={currentUser} isSef={isSef} />}
+            {view === 'dashboard'     && <Dashboard members={members} activities={activities} announcements={announcements} warnings={warnings} setView={v => { setView(v); setSelMember(null); }} setSelMember={setSelMember} currentUser={currentUser} isSef={isSef} />}
             {isActiveMembersView      && (
               <MembersView
                 members={members} activities={activities} warnings={warnings} promotions={promotions}
