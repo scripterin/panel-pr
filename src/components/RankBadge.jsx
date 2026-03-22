@@ -40,14 +40,6 @@ function IconHospital() {
   );
 }
 
-function IconAsp() {
-  return (
-    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-      <circle cx="12" cy="12" r="10"/>
-    </svg>
-  );
-}
-
 export default function RankBadge({ rank }) {
   if (rank === 'Supervizor PR') return (
     <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(250,204,21,0.15)', color: '#FDE047', border: '1px solid rgba(250,204,21,0.35)' }}>
@@ -55,7 +47,7 @@ export default function RankBadge({ rank }) {
     </span>
   );
   if (rank === 'Conducere Spital') return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(20,184,166,0.15)', color: '#EF4444', border: '1px solid rgba(20,184,166,0.35)' }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(239,68,68,0.15)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.35)' }}>
       <IconHospital /> Conducere Spital
     </span>
   );
@@ -67,11 +59,6 @@ export default function RankBadge({ rank }) {
   if (rank === 'Adjunct PR') return (
     <span className="rb rb-adj" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
       <IconShield /> Adjunct PR
-    </span>
-  );
-  if (rank === 'Aspirant PR') return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(100,116,139,0.15)', color: '#94A3B8', border: '1px solid rgba(100,116,139,0.30)' }}>
-      <IconAsp /> Aspirant PR
     </span>
   );
   return (

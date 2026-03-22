@@ -5,7 +5,6 @@ import { getWeekStart, inDateRange } from '../utils/helpers';
 import { db } from '../utils/firebase';
 import { collection, onSnapshot, addDoc, deleteDoc, doc, serverTimestamp } from 'firebase/firestore';
 
-// ── SVG Icons ──────────────────────────────────────────
 const Icons = {
   users:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
   check:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="20 6 9 17 4 12"/></svg>,
@@ -33,11 +32,11 @@ const TAG_CONFIG = {
 };
 
 function AddUpdateModal({ currentUser, onClose, onSave }) {
-  const [title,   setTitle]   = useState('');
-  const [desc,    setDesc]    = useState('');
-  const [tag,     setTag]     = useState('Nou');
+  const [title, setTitle] = useState('');
+  const [desc,  setDesc]  = useState('');
+  const [tag,   setTag]   = useState('Nou');
   const [version, setVersion] = useState('');
-  const [err,     setErr]     = useState('');
+  const [err,   setErr]   = useState('');
 
   async function save() {
     if (!title.trim()) { setErr('Titlul este obligatoriu!'); return; }
@@ -46,18 +45,12 @@ function AddUpdateModal({ currentUser, onClose, onSave }) {
     onClose();
   }
 
-  const inp = {
-    width: '100%', background: 'var(--b3)', border: '1px solid var(--br)',
-    borderRadius: 10, padding: '9px 13px', fontSize: 12, color: 'var(--t)',
-    fontFamily: 'Space Grotesk, sans-serif', outline: 'none', boxSizing: 'border-box',
-    transition: 'border-color .2s',
-  };
+  const inp = { width: '100%', background: 'var(--b3)', border: '1px solid var(--br)', borderRadius: 10, padding: '9px 13px', fontSize: 12, color: 'var(--t)', fontFamily: 'Space Grotesk, sans-serif', outline: 'none', boxSizing: 'border-box', transition: 'border-color .2s' };
   const lbl = { fontSize: 11, color: 'var(--t3)', fontWeight: 600, letterSpacing: '.5px', textTransform: 'uppercase', display: 'block', marginBottom: 6 };
 
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ background: 'var(--b2)', border: '1px solid rgba(124,58,237,0.25)', borderRadius: 20, padding: 28, width: 480, boxShadow: '0 30px 80px rgba(0,0,0,0.7)', animation: 'modalIn .18s ease' }}>
-
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 22 }}>
           <div style={{ width: 44, height: 44, borderRadius: 12, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--p3)' }}>{Icons.plus}</div>
           <div>
@@ -65,67 +58,34 @@ function AddUpdateModal({ currentUser, onClose, onSave }) {
             <div style={{ fontSize: 11, color: 'var(--t3)' }}>Completează detaliile noii actualizări</div>
           </div>
         </div>
-
         {err && <div style={{ background: 'rgba(239,68,68,0.09)', border: '1px solid rgba(239,68,68,0.28)', borderRadius: 8, padding: '8px 12px', fontSize: 11, color: '#FCA5A5', marginBottom: 14 }}>⚠️ {err}</div>}
-
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
-          {/* Titlu + Versiune */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: 10 }}>
             <div>
               <label style={lbl}>Titlu *</label>
-              <input style={inp} placeholder="ex: Sistem Sancțiuni" value={title} onChange={e => { setTitle(e.target.value); setErr(''); }}
-                onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'}
-                onBlur={e => e.target.style.borderColor = 'var(--br)'} />
+              <input style={inp} placeholder="ex: Sistem Sancțiuni" value={title} onChange={e => { setTitle(e.target.value); setErr(''); }} onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'} onBlur={e => e.target.style.borderColor = 'var(--br)'} />
             </div>
             <div>
               <label style={lbl}>Versiune</label>
-              <input style={{ ...inp, width: 90 }} placeholder="v1.2" value={version} onChange={e => setVersion(e.target.value)}
-                onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'}
-                onBlur={e => e.target.style.borderColor = 'var(--br)'} />
+              <input style={{ ...inp, width: 90 }} placeholder="v1.2" value={version} onChange={e => setVersion(e.target.value)} onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'} onBlur={e => e.target.style.borderColor = 'var(--br)'} />
             </div>
           </div>
-
-          {/* Tag */}
           <div>
             <label style={lbl}>Tip</label>
             <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               {Object.entries(TAG_CONFIG).map(([key, cfg]) => (
-                <button key={key} onClick={() => setTag(key)} style={{
-                  padding: '5px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600,
-                  fontFamily: 'Space Grotesk, sans-serif', transition: 'all .15s',
-                  background: tag === key ? cfg.bg : 'var(--b3)',
-                  border: `1px solid ${tag === key ? cfg.border : 'var(--br)'}`,
-                  color: tag === key ? cfg.color : 'var(--t3)',
-                }}>{key}</button>
+                <button key={key} onClick={() => setTag(key)} style={{ padding: '5px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 600, fontFamily: 'Space Grotesk, sans-serif', transition: 'all .15s', background: tag === key ? cfg.bg : 'var(--b3)', border: `1px solid ${tag === key ? cfg.border : 'var(--br)'}`, color: tag === key ? cfg.color : 'var(--t3)' }}>{key}</button>
               ))}
             </div>
           </div>
-
-          {/* Descriere */}
           <div>
             <label style={lbl}>Descriere *</label>
-            <textarea rows={3} style={{ ...inp, resize: 'vertical', minHeight: 80, lineHeight: 1.6 }}
-              placeholder="Descrie ce s-a schimbat..."
-              value={desc} onChange={e => { setDesc(e.target.value); setErr(''); }}
-              onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'}
-              onBlur={e => e.target.style.borderColor = 'var(--br)'}
-            />
+            <textarea rows={3} style={{ ...inp, resize: 'vertical', minHeight: 80, lineHeight: 1.6 }} placeholder="Descrie ce s-a schimbat..." value={desc} onChange={e => { setDesc(e.target.value); setErr(''); }} onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'} onBlur={e => e.target.style.borderColor = 'var(--br)'} />
           </div>
         </div>
-
         <div style={{ display: 'flex', gap: 10, marginTop: 20 }}>
-          <button onClick={onClose}
-            style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'var(--b3)', border: '1px solid var(--br)', color: 'var(--t2)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }}
-            onMouseEnter={e => e.currentTarget.style.background = 'var(--br)'}
-            onMouseLeave={e => e.currentTarget.style.background = 'var(--b3)'}>
-            Anulează
-          </button>
-          <button onClick={save}
-            style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'linear-gradient(135deg,var(--pd),var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }}
-            onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
-            onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            ✅ Publică Actualizarea
-          </button>
+          <button onClick={onClose} style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'var(--b3)', border: '1px solid var(--br)', color: 'var(--t2)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--br)'} onMouseLeave={e => e.currentTarget.style.background = 'var(--b3)'}>Anulează</button>
+          <button onClick={save} style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'linear-gradient(135deg,var(--pd),var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 4px 20px rgba(124,58,237,0.3)' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.85'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>✅ Publică Actualizarea</button>
         </div>
       </div>
       <style>{`@keyframes modalIn { from { opacity:0; transform:scale(0.93) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }`}</style>
@@ -150,8 +110,8 @@ export default function Dashboard({ members, activities, announcements, warnings
   const weekEnd   = new Date(weekStart.getTime() + 7 * 86400000);
   const weekActs  = activities.filter(a => inDateRange(a.date, weekStart, weekEnd));
 
-  const [updates,   setUpdates]   = useState([]);
-  const [addModal,  setAddModal]  = useState(false);
+  const [updates,  setUpdates]  = useState([]);
+  const [addModal, setAddModal] = useState(false);
 
   useEffect(() => {
     const unsub = onSnapshot(collection(db, 'updates'), snap => {
@@ -163,13 +123,8 @@ export default function Dashboard({ members, activities, announcements, warnings
   }, []);
 
   async function handleAdd(data) {
-    try {
-      await addDoc(collection(db, 'updates'), {
-        ...data,
-        date: new Date().toLocaleDateString('ro-RO'),
-        createdAt: serverTimestamp(),
-      });
-    } catch(e) { console.error(e); }
+    try { await addDoc(collection(db, 'updates'), { ...data, date: new Date().toLocaleDateString('ro-RO'), createdAt: serverTimestamp() }); }
+    catch(e) { console.error(e); }
   }
 
   async function handleDelete(id) {
@@ -179,13 +134,7 @@ export default function Dashboard({ members, activities, announcements, warnings
 
   return (
     <div>
-      {addModal && (
-        <AddUpdateModal
-          currentUser={currentUser}
-          onClose={() => setAddModal(false)}
-          onSave={handleAdd}
-        />
-      )}
+      {addModal && <AddUpdateModal currentUser={currentUser} onClose={() => setAddModal(false)} onSave={handleAdd} />}
 
       {pinned.length > 0 && (
         <div className="alert-banner">
@@ -197,77 +146,43 @@ export default function Dashboard({ members, activities, announcements, warnings
         </div>
       )}
 
-      {/* Stats */}
       <div className="stats-grid">
-        <div className="stat-card sp">
-          <div className="sc-ic ip" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.users}</div>
-          <div className="sc-label">Total Membri</div>
-          <div className="sc-val">{total}</div>
-        </div>
-        <div className="stat-card sg">
-          <div className="sc-ic ig" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.check}</div>
-          <div className="sc-label">Membri Activi</div>
-          <div className="sc-val">{activ}</div>
-        </div>
-        <div className="stat-card sb2">
-          <div className="sc-ic ib" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.star}</div>
-          <div className="sc-label">Conducere PR</div>
-          <div className="sc-val">{sef + adj}</div>
-        </div>
-        <div className="stat-card sa">
-          <div className="sc-ic ia" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.calendar}</div>
-          <div className="sc-label">Evenimente Săpt.</div>
-          <div className="sc-val">{weekActs.length}</div>
-        </div>
+        <div className="stat-card sp"><div className="sc-ic ip" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.users}</div><div className="sc-label">Total Membri</div><div className="sc-val">{total}</div></div>
+        <div className="stat-card sg"><div className="sc-ic ig" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.check}</div><div className="sc-label">Membri Activi</div><div className="sc-val">{activ}</div></div>
+        <div className="stat-card sb2"><div className="sc-ic ib" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.star}</div><div className="sc-label">Conducere PR</div><div className="sc-val">{sef + adj}</div></div>
+        <div className="stat-card sa"><div className="sc-ic ia" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>{Icons.calendar}</div><div className="sc-label">Evenimente Săpt.</div><div className="sc-val">{weekActs.length}</div></div>
       </div>
 
       <div className="two-col">
-        {/* Recent members */}
         <div className="card">
           <div className="card-header">
-            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.users}</span> Membri Recenți
-            </span>
+            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.users}</span> Membri Recenți</span>
             <span className="card-action" onClick={() => setView('members')}>Vezi toți →</span>
           </div>
           {!members.length ? (
-            <div className="empty-st">
-              <div className="empty-ico" style={{ display: 'flex', justifyContent: 'center', color: 'var(--t3)', opacity: 0.4 }}>{Icons.user}</div>
-              <p>Niciun membru adăugat</p>
-              <small>Apasă "+ Adaugă Membru" pentru a începe</small>
-            </div>
+            <div className="empty-st"><div className="empty-ico" style={{ display: 'flex', justifyContent: 'center', color: 'var(--t3)', opacity: 0.4 }}>{Icons.user}</div><p>Niciun membru adăugat</p><small>Apasă "+ Adaugă Membru" pentru a începe</small></div>
           ) : (
             <table>
               <thead><tr><th>Nume</th><th>Grad</th><th>Status</th><th>Evenimente</th></tr></thead>
               <tbody>
                 {members.slice(0, 6).map(m => (
-                  <tr key={m.id} onClick={() => { setSelMember(m.id); setView('member-detail'); }}>
-                    <td className="nm">{m.name}</td>
-                    <td><RankBadge rank={m.rank} /></td>
-                    <td><StatusPill s={m.status} /></td>
-                    <td style={{ color: 'var(--p3)', fontWeight: 700 }}>{m.activities}</td>
-                  </tr>
+                  <tr key={m.id}><td className="nm" style={{ cursor: 'default' }}>{m.name}</td><td><RankBadge rank={m.rank} /></td><td><StatusPill s={m.status} /></td><td style={{ color: 'var(--p3)', fontWeight: 700 }}>{m.activities}</td></tr>
                 ))}
               </tbody>
             </table>
           )}
         </div>
 
-        {/* Announcements */}
         <div className="card">
           <div className="card-header">
-            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.megaphone}</span> Anunțuri
-            </span>
+            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.megaphone}</span> Anunțuri</span>
             <span className="card-action" onClick={() => setView('announcements')}>Toate →</span>
           </div>
           {!announcements.length ? (
             <div style={{ padding: '30px 20px', textAlign: 'center', color: 'var(--t3)', fontSize: 12 }}>Niciun anunț</div>
           ) : announcements.slice(0, 3).map((a, i) => (
             <div key={i} className="act-item">
-              <div className="act-ico" style={{ display: 'flex', alignItems: 'center', color: 'var(--p3)' }}>
-                {a.pinned ? Icons.pin : Icons.megaphone}
-              </div>
+              <div className="act-ico" style={{ display: 'flex', alignItems: 'center', color: 'var(--p3)' }}>{a.pinned ? Icons.pin : Icons.megaphone}</div>
               <div>
                 <p style={{ fontSize: 12, color: 'var(--t)' }}><span className="act-name">{a.title}</span></p>
                 <p style={{ fontSize: 11, color: 'var(--t2)', marginTop: 2 }}>{a.body.length > 50 ? a.body.slice(0, 50) + '...' : a.body}</p>
@@ -279,55 +194,42 @@ export default function Dashboard({ members, activities, announcements, warnings
       </div>
 
       <div className="two-eq">
-        {/* Grade distribution */}
         <div className="card">
           <div className="card-header">
-            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.chart}</span> Distribuție Grade
-            </span>
+            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.chart}</span> Distribuție Grade</span>
           </div>
           <div style={{ padding: '16px 20px' }}>
             <div className="prog-item">
               <div className="prog-hdr">
-                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#FDE047', display: 'flex' }}>{Icons.star}</span> Supervizor PR
-                </span>
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ color: '#FDE047', display: 'flex' }}>{Icons.star}</span> Supervizor PR</span>
                 <span className="prog-v" style={{ color: '#FDE047' }}>{sup}</span>
               </div>
               <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(sup / maxB * 100) + '%', background: 'linear-gradient(90deg, #92400e, #FDE047)' }} /></div>
             </div>
             <div className="prog-item">
               <div className="prog-hdr">
-                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#EF4444 ', display: 'flex' }}>{Icons.circle}</span> Conducere Spital
-                </span>
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ color: '#EF4444', display: 'flex' }}>{Icons.circle}</span> Conducere Spital</span>
                 <span className="prog-v" style={{ color: '#EF4444' }}>{cond}</span>
               </div>
-              <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(cond / maxB * 100) + '%', background: 'linear-gradient(90deg, #065f46, #2DD4BF)' }} /></div>
+              <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(cond / maxB * 100) + '%', background: 'linear-gradient(90deg, #7f1d1d, #EF4444)' }} /></div>
             </div>
             <div className="prog-item">
               <div className="prog-hdr">
-                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#A78BFA', display: 'flex' }}>{Icons.crown}</span> Șef PR
-                </span>
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ color: '#A78BFA', display: 'flex' }}>{Icons.crown}</span> Șef PR</span>
                 <span className="prog-v">{sef}</span>
               </div>
               <div className="prog-track"><div className="prog-fill pf-p" style={{ width: Math.round(sef / maxB * 100) + '%' }} /></div>
             </div>
             <div className="prog-item">
               <div className="prog-hdr">
-                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#93C5FD', display: 'flex' }}>{Icons.zap}</span> Adjunct PR
-                </span>
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ color: '#93C5FD', display: 'flex' }}>{Icons.zap}</span> Adjunct PR</span>
                 <span className="prog-v">{adj}</span>
               </div>
               <div className="prog-track"><div className="prog-fill pf-b" style={{ width: Math.round(adj / maxB * 100) + '%' }} /></div>
             </div>
             <div className="prog-item">
               <div className="prog-hdr">
-                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#6EE7B7', display: 'flex' }}>{Icons.circle}</span> Membru PR
-                </span>
+                <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}><span style={{ color: '#6EE7B7', display: 'flex' }}>{Icons.circle}</span> Membru PR</span>
                 <span className="prog-v">{mem}</span>
               </div>
               <div className="prog-track"><div className="prog-fill pf-g" style={{ width: Math.round(mem / maxB * 100) + '%' }} /></div>
@@ -335,12 +237,9 @@ export default function Dashboard({ members, activities, announcements, warnings
           </div>
         </div>
 
-        {/* Top activity */}
         <div className="card">
           <div className="card-header">
-            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-              <span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.trophy}</span> TOP EVENIMENTE
-            </span>
+            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.trophy}</span> TOP EVENIMENTE</span>
           </div>
           <table>
             <thead><tr><th>#</th><th>Nume</th><th>Activități</th></tr></thead>
@@ -359,65 +258,36 @@ export default function Dashboard({ members, activities, announcements, warnings
         </div>
       </div>
 
-      {/* ── Actualizări ── */}
       <div className="card" style={{ marginTop: 4 }}>
         <div className="card-header">
-          <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-            <span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.zap}</span> Actualizări Sistem
-          </span>
+          <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><span style={{ color: 'var(--p3)', display: 'flex' }}>{Icons.zap}</span> Actualizări Sistem</span>
           {isSef && (
-            <button
-              onClick={() => setAddModal(true)}
-              style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', color: 'var(--p3)', fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', transition: 'all .2s' }}
-              onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'}
-              onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}
-            >
+            <button onClick={() => setAddModal(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '5px 12px', borderRadius: 8, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', color: 'var(--p3)', fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', transition: 'all .2s' }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}>
               <span style={{ display: 'flex' }}>{Icons.edit}</span> Adaugă
             </button>
           )}
         </div>
-
         {!updates.length ? (
-          <div className="empty-st">
-            <div className="empty-ico">⚡</div>
-            <p>Nicio actualizare publicată</p>
-            {isSef && <small>Apasă „Adaugă" pentru a publica prima actualizare</small>}
-          </div>
+          <div className="empty-st"><div className="empty-ico">⚡</div><p>Nicio actualizare publicată</p>{isSef && <small>Apasă „Adaugă" pentru a publica prima actualizare</small>}</div>
         ) : (
           <div style={{ padding: '12px 20px', display: 'flex', flexDirection: 'column', gap: 10 }}>
             {updates.map(u => {
               const tagCfg = TAG_CONFIG[u.tag] || TAG_CONFIG['Anunț'];
               return (
                 <div key={u.id} style={{ display: 'flex', gap: 14, alignItems: 'flex-start', padding: '14px 16px', background: 'var(--b3)', border: '1px solid var(--br)', borderRadius: 12, borderLeft: `3px solid ${tagCfg.color}` }}>
-                  {/* Tag + versiune */}
                   <div style={{ flexShrink: 0, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, paddingTop: 2 }}>
-                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '3px 10px', borderRadius: 7, fontSize: 10, fontWeight: 700, background: tagCfg.bg, border: `1px solid ${tagCfg.border}`, color: tagCfg.color, whiteSpace: 'nowrap' }}>
-                      {u.tag}
-                    </span>
-                    {u.version && (
-                      <span style={{ fontSize: 9, color: 'var(--t3)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600, letterSpacing: '.5px' }}>{u.version}</span>
-                    )}
+                    <span style={{ display: 'inline-flex', alignItems: 'center', padding: '3px 10px', borderRadius: 7, fontSize: 10, fontWeight: 700, background: tagCfg.bg, border: `1px solid ${tagCfg.border}`, color: tagCfg.color, whiteSpace: 'nowrap' }}>{u.tag}</span>
+                    {u.version && <span style={{ fontSize: 9, color: 'var(--t3)', fontFamily: 'JetBrains Mono, monospace', fontWeight: 600, letterSpacing: '.5px' }}>{u.version}</span>}
                   </div>
-
-                  {/* Conținut */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--t)', marginBottom: 4 }}>{u.title}</div>
                     <div style={{ fontSize: 12, color: 'var(--t2)', lineHeight: 1.6 }}>{u.desc}</div>
                     <div style={{ fontSize: 10, color: 'var(--t3)', marginTop: 6, display: 'flex', gap: 10 }}>
-                      <span>📅 {u.date}</span>
-                      {u.autor && <span>👤 {u.autor}</span>}
+                      <span>📅 {u.date}</span>{u.autor && <span>👤 {u.autor}</span>}
                     </div>
                   </div>
-
-                  {/* Șterge (doar Șef PR) */}
                   {isSef && (
-                    <button onClick={() => handleDelete(u.id)}
-                      style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#FCA5A5', borderRadius: 7, padding: '5px 7px', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: 'all .2s', flexShrink: 0 }}
-                      onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.18)'}
-                      onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.08)'}
-                      title="Șterge actualizarea">
-                      {Icons.trash}
-                    </button>
+                    <button onClick={() => handleDelete(u.id)} style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', color: '#FCA5A5', borderRadius: 7, padding: '5px 7px', cursor: 'pointer', display: 'flex', alignItems: 'center', transition: 'all .2s', flexShrink: 0 }} onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.18)'} onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.08)'} title="Șterge actualizarea">{Icons.trash}</button>
                   )}
                 </div>
               );
