@@ -38,6 +38,8 @@ function IconHospital() {
       <path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zm-7 14H8v-2h4v2zm0-4H8v-2h4v2zm4-4h-2v2h2v2h-2v2h-2v-2h-2v-2h2v-2H8V7h4V5h2v2h4v2z"/>
     </svg>
   );
+}
+
 function IconAsp() {
   return (
     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
