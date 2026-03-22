@@ -55,7 +55,7 @@ export default function RankBadge({ rank }) {
     </span>
   );
   if (rank === 'Conducere Spital') return (
-    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(20,184,166,0.15)', color: '#2DD4BF', border: '1px solid rgba(20,184,166,0.35)' }}>
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(20,184,166,0.15)', color: '#EF4444', border: '1px solid rgba(20,184,166,0.35)' }}>
       <IconHospital /> Conducere Spital
     </span>
   );

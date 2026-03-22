@@ -299,9 +299,9 @@ export default function Dashboard({ members, activities, announcements, warnings
             <div className="prog-item">
               <div className="prog-hdr">
                 <span className="prog-n" style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <span style={{ color: '#2DD4BF', display: 'flex' }}>{Icons.circle}</span> Conducere Spital
+                  <span style={{ color: '#EF4444 ', display: 'flex' }}>{Icons.circle}</span> Conducere Spital
                 </span>
-                <span className="prog-v" style={{ color: '#2DD4BF' }}>{cond}</span>
+                <span className="prog-v" style={{ color: '#EF4444' }}>{cond}</span>
               </div>
               <div className="prog-track"><div className="prog-fill" style={{ width: Math.round(cond / maxB * 100) + '%', background: 'linear-gradient(90deg, #065f46, #2DD4BF)' }} /></div>
             </div>
