@@ -27,7 +27,7 @@ function getCurrentPeriod() {
   return { start, end };
 }
 
-export default function ReportView({ members, activities, warnings, promotions, toast }) {
+export default function ReportView({ members, activities, warnings, promotions, toast, isAdj }) {
   const now                          = new Date();
   const { start: periodStart, end: periodEnd } = getCurrentPeriod();
 
@@ -158,7 +158,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
           <span style={{ color: 'var(--t3)', margin: '0 6px' }}>→</span>
           <strong style={{ color: 'var(--p3)' }}>{fmt(periodEnd)}</strong>
         </div>
-        <button className="btn-p" onClick={downloadReport} style={{ display: 'flex', alignItems: 'center', gap: 7 }}>
+        <button className="btn-p" onClick={downloadReport} style={{ display: isAdj ? 'flex' : 'none', alignItems: 'center', gap: 7 }}>
           <IcoDownload /> Descarcă Raport TXT
         </button>
       </div>
