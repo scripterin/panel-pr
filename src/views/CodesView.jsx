@@ -4,7 +4,7 @@ import { getAll, COL } from '../utils/storage';
 const CODE_GROUPS = [
   { label: '⭐ Coduri Supervizor PR',    rank: 'Supervizor PR',    color: '#FDE047'   },
   { label: '👑 Coduri Șef PR',           rank: 'Sef PR',           color: 'var(--p3)' },
-  { label: '🏥 Coduri Conducere Spital', rank: 'Conducere Spital', color: '#2DD4BF'   },
+  { label: '🏥 Coduri Conducere Spital', rank: 'Conducere Spital', color: '#EF4444'   },
   { label: '⚡ Coduri Adjunct PR',       rank: 'Adjunct PR',       color: '#93C5FD'   },
   { label: '● Coduri Membru PR',         rank: 'Membru PR',        color: '#6EE7B7'   },
 ];
