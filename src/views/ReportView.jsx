@@ -17,19 +17,19 @@ const IcoCheckAll = () => <svg width="16" height="16" viewBox="0 0 24 24" fill="
 
 // ── Calculează perioada curentă din 2 în 2 săptămâni ──
 function getCurrentPeriod() {
-  const ANCHOR = new Date('2026-03-16T00:00:00');
+  const ANCHOR = new Date('2026-03-23T00:00:00');
   const CYCLE  = 14 * 24 * 60 * 60 * 1000;
   const now    = new Date();
   const diff   = now.getTime() - ANCHOR.getTime();
-  const cycles = Math.floor(diff / CYCLE);
+  const cycles = Math.floor(Math.max(0, diff) / CYCLE);
   const start  = new Date(ANCHOR.getTime() + cycles * CYCLE);
   const end    = new Date(start.getTime() + CYCLE);
-  return { start, end, cycleIndex: cycles + 1 };
+  return { start, end };
 }
 
 export default function ReportView({ members, activities, warnings, promotions, toast }) {
   const now                          = new Date();
-  const { start: periodStart, end: periodEnd, cycleIndex } = getCurrentPeriod();
+  const { start: periodStart, end: periodEnd } = getCurrentPeriod();
 
   const periodActs  = activities.filter(a => inDateRange(a.date, periodStart, periodEnd));
   const periodWarn  = warnings.filter(w   => inDateRange(w.date, periodStart, periodEnd));
@@ -55,15 +55,13 @@ export default function ReportView({ members, activities, warnings, promotions, 
       const sep   = '='.repeat(60);
       const dash  = '-'.repeat(60);
 
-      // ── HEADER ──
       lines.push(sep);
-      lines.push(`RAPORT #${cycleIndex} - DEPARTAMENT PR`);
+      lines.push(`RAPORT - DEPARTAMENT PR`);
       lines.push(`Perioada: ${fmt(periodStart)} -> ${fmt(periodEnd)}`);
       lines.push(`Generat: ${new Date().toLocaleString('ro-RO')}`);
       lines.push(sep);
       lines.push('');
 
-      // ── STATISTICI ──
       lines.push('STATISTICI PERIOADA');
       lines.push(dash);
       lines.push(`Evenimente:    ${periodActs.length}`);
@@ -72,7 +70,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
       lines.push(`Inactivi:      ${inactive.length}`);
       lines.push('');
 
-      // ── ACTIVITATE PE ZILE ──
       lines.push('ACTIVITATE PE ZILE (14 ZILE)');
       lines.push(dash);
       days.forEach((d, i) => {
@@ -82,7 +79,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
       });
       lines.push('');
 
-      // ── TOP MEMBRI ──
       lines.push('TOP MEMBRI PERIOADA');
       lines.push(dash);
       const topActors = actByMember.filter(m => m.pActs > 0).slice(0, 6);
@@ -95,7 +91,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
       }
       lines.push('');
 
-      // ── PROMOVĂRI ──
       lines.push('PROMOVARI PERIOADA');
       lines.push(dash);
       if (!periodPromo.length) {
@@ -107,7 +102,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
       }
       lines.push('');
 
-      // ── INACTIVI ──
       lines.push('MEMBRI INACTIVI / CONCEDIU');
       lines.push(dash);
       if (!inactive.length) {
@@ -120,31 +114,30 @@ export default function ReportView({ members, activities, warnings, promotions, 
       }
       lines.push('');
 
-      // ── TABEL MEMBRI ──
       lines.push('EVENIMENTE MEMBRI - PERIOADA CURENTA');
       lines.push(dash);
       lines.push(`${'#'.padEnd(4)}${'Nume'.padEnd(25)}${'Grad'.padEnd(20)}${'Status'.padEnd(12)}${'Perioada'.padEnd(10)}Total`);
       lines.push(dash);
-      actByMember.forEach((m, i) => {
-        lines.push(
-          `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${String(m.pActs).padEnd(10)}${m.activities}`
-        );
-      });
+      actByMember
+        .filter(m => m.rank !== 'Membru PR' && m.rank !== 'Aspirant PR')
+        .forEach((m, i) => {
+          lines.push(
+            `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${String(m.pActs).padEnd(10)}${m.activities}`
+          );
+        });
       lines.push('');
 
-      // ── FOOTER ──
       lines.push(sep);
       lines.push('Document generat automat - Departamentul de Relatii Publice - Confidential');
       lines.push('PR SYSTEM');
       lines.push(sep);
 
-      // ── DOWNLOAD ──
       const content = lines.join('\n');
       const blob    = new Blob([content], { type: 'text/plain;charset=utf-8' });
       const url     = URL.createObjectURL(blob);
       const a       = document.createElement('a');
       a.href        = url;
-      a.download    = `raport_pr_${cycleIndex}_${fmt(periodStart).replace(/\./g, '-')}.txt`;
+      a.download    = `raport_pr_${fmt(periodStart).replace(/\./g, '-')}.txt`;
       a.click();
       URL.revokeObjectURL(url);
 
@@ -160,7 +153,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
       {/* ── Header ── */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
         <div style={{ fontSize: 12, color: 'var(--t2)' }}>
-          <span style={{ color: 'var(--t3)', marginRight: 6 }}>Raport #{cycleIndex} ·</span>
+          <span style={{ color: 'var(--t3)', marginRight: 6 }}>Raport ·</span>
           <strong style={{ color: 'var(--p3)' }}>{fmt(periodStart)}</strong>
           <span style={{ color: 'var(--t3)', margin: '0 6px' }}>→</span>
           <strong style={{ color: 'var(--p3)' }}>{fmt(periodEnd)}</strong>
@@ -212,18 +205,10 @@ export default function ReportView({ members, activities, warnings, promotions, 
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 90, marginBottom: 8 }}>
               {dayActs.map((c, i) => (
                 <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
-                  <span style={{
-                    fontSize: 9, fontWeight: 700,
-                    color: c > 0 ? 'var(--p3)' : 'transparent',
-                    minHeight: 12,
-                  }}>{c > 0 ? c : ''}</span>
+                  <span style={{ fontSize: 9, fontWeight: 700, color: c > 0 ? 'var(--p3)' : 'transparent', minHeight: 12 }}>{c > 0 ? c : ''}</span>
                   <div style={{
                     width: '100%',
-                    background: c > 0
-                      ? c === Math.max(...dayActs)
-                        ? 'linear-gradient(180deg,#A78BFA,#7C3AED)'
-                        : 'linear-gradient(180deg,var(--p2),var(--pd))'
-                      : 'rgba(124,58,237,0.08)',
+                    background: c > 0 ? c === Math.max(...dayActs) ? 'linear-gradient(180deg,#A78BFA,#7C3AED)' : 'linear-gradient(180deg,var(--p2),var(--pd))' : 'rgba(124,58,237,0.08)',
                     borderRadius: '4px 4px 2px 2px',
                     height: Math.max(4, Math.round(c / maxDay * 64)) + 'px',
                     transition: 'height .4s ease',
@@ -242,18 +227,9 @@ export default function ReportView({ members, activities, warnings, promotions, 
                 const isToday = date.toDateString() === new Date().toDateString();
                 return (
                   <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
-                    <span style={{
-                      fontSize: 8, fontWeight: isToday ? 700 : 500,
-                      color: isToday ? 'var(--p3)' : 'var(--t3)',
-                    }}>{d}</span>
-                    <span style={{
-                      fontSize: 7,
-                      color: isToday ? 'var(--p3)' : 'rgba(124,58,237,0.3)',
-                      fontWeight: isToday ? 700 : 400,
-                    }}>{date.getDate()}</span>
-                    {isToday && (
-                      <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--p3)' }} />
-                    )}
+                    <span style={{ fontSize: 8, fontWeight: isToday ? 700 : 500, color: isToday ? 'var(--p3)' : 'var(--t3)' }}>{d}</span>
+                    <span style={{ fontSize: 7, color: isToday ? 'var(--p3)' : 'rgba(124,58,237,0.3)', fontWeight: isToday ? 700 : 400 }}>{date.getDate()}</span>
+                    {isToday && <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'var(--p3)' }} />}
                   </div>
                 );
               })}
