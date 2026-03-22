@@ -1,5 +1,13 @@
 import React from 'react';
 
+function IconStar() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+    </svg>
+  );
+}
+
 function IconCrown() {
   return (
     <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
@@ -24,7 +32,20 @@ function IconMember() {
   );
 }
 
+function IconAsp() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+      <circle cx="12" cy="12" r="10"/>
+    </svg>
+  );
+}
+
 export default function RankBadge({ rank }) {
+  if (rank === 'Supervizor PR') return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(250,204,21,0.15)', color: '#FDE047', border: '1px solid rgba(250,204,21,0.35)' }}>
+      <IconStar /> Supervizor PR
+    </span>
+  );
   if (rank === 'Sef PR') return (
     <span className="rb rb-sef" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
       <IconCrown /> Șef PR
@@ -33,6 +54,11 @@ export default function RankBadge({ rank }) {
   if (rank === 'Adjunct PR') return (
     <span className="rb rb-adj" style={{ display: 'inline-flex', alignItems: 'center', gap: 5 }}>
       <IconShield /> Adjunct PR
+    </span>
+  );
+  if (rank === 'Aspirant PR') return (
+    <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, padding: '3px 10px', borderRadius: 6, fontSize: 10, fontWeight: 700, letterSpacing: '.3px', whiteSpace: 'nowrap', background: 'rgba(100,116,139,0.15)', color: '#94A3B8', border: '1px solid rgba(100,116,139,0.30)' }}>
+      <IconAsp /> Aspirant PR
     </span>
   );
   return (

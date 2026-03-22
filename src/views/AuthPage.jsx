@@ -106,11 +106,11 @@ export default function AuthPage({ onLogin }) {
     setErr(''); setLoading(true);
     try {
       if (regType === 'ic') {
-        if (!reg.charName) { setErr('Completează numele personajului!'); return; }
-        if (!reg.charId)   { setErr('Completează ID-ul personajului!'); return; }
-        if (!reg.icEmail)  { setErr('Completează emailul IC (@fpt.ro)!'); return; }
-        if (!/^[^@]+@fpt\.ro$/.test(reg.icEmail)) {
-          setErr('Emailul IC trebuie să fie în format email@fpt.ro!'); return;
+        if (!reg.charName) { setErr('Completează numele!'); return; }
+        if (!reg.charId)   { setErr('Completează ID-ul!'); return; }
+        if (!reg.icEmail)  { setErr('Completează emailul IC (@fplayt.ro)!'); return; }
+        if (!/^[^@]+@fplayt\.ro$/.test(reg.icEmail)) {
+          setErr('Emailul IC trebuie să fie în format email@fplayt.ro!'); return;
         }
       } else {
         if (!reg.firstName || !reg.lastName) {
@@ -162,6 +162,7 @@ export default function AuthPage({ onLogin }) {
         accountType: regType,
         charId:      nu.charId  || '',
         icEmail:     nu.icEmail || '',
+        faction:     nu.faction || '',
       });
 
       await addLog('REGISTER',
@@ -179,7 +180,7 @@ export default function AuthPage({ onLogin }) {
     }
   }
 
-  const rc = { 'Sef PR': 'var(--p3)', 'Adjunct PR': '#93C5FD', 'Membru PR': '#6EE7B7' };
+  const rc = { 'Supervizor PR': '#FDE047', 'Sef PR': 'var(--p3)', 'Adjunct PR': '#93C5FD', 'Membru PR': '#6EE7B7' };
 
 return (
   <div className="auth-wrap">
@@ -294,20 +295,20 @@ return (
                 <div>
                   {regType === 'ic' ? (
                     <>
-                      <label className="flabel">Nume Personaj (IC)</label>
-                      <input className="finput" placeholder="ex: Ion Popescu"
+                      <label className="flabel">Nume + Prenume</label>
+                      <input className="finput" placeholder="Paduraru David"
                         value={reg.charName} onChange={e => setReg(p => ({ ...p, charName: e.target.value }))} />
-                      <label className="flabel">ID Personaj în Joc</label>
+                      <label className="flabel">ID</label>
                       <input className="finput" placeholder="ex: 12345"
                         value={reg.charId} onChange={e => setReg(p => ({ ...p, charId: e.target.value }))} />
-                      <label className="flabel">Callsign (doar numărul)</label>
+                      <label className="flabel">Callsign</label>
                       <div style={{ position: 'relative', marginBottom: 14 }}>
                         <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--p3)', fontWeight: 700, fontSize: 13, pointerEvents: 'none', fontFamily: 'JetBrains Mono, monospace' }}>M-[</span>
-                        <input className="finput" placeholder="42"
+                        <input className="finput" placeholder="102"
                           value={reg.faction}
                           onChange={e => setReg(p => ({ ...p, faction: e.target.value.replace(/\D/g, '') }))}
                           style={{ paddingLeft: 48, paddingRight: 28, marginBottom: 0 }} />
-                        <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--p3)', fontWeight: 700, fontSize: 13, pointerEvents: 'none', fontFamily: 'JetBrains Mono, monospace' }}>)</span>
+                        <span style={{ position: 'absolute', right: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--p3)', fontWeight: 700, fontSize: 13, pointerEvents: 'none', fontFamily: 'JetBrains Mono, monospace' }}>]</span>
                       </div>
                       {reg.faction && (
                         <div style={{ fontSize: 11, color: 'var(--t2)', marginBottom: 14, marginTop: -8 }}>
@@ -317,8 +318,8 @@ return (
                       <label className="flabel">Discord ID</label>
                       <input className="finput" placeholder="ex: 123456789012345678"
                         value={reg.discordId} onChange={e => setReg(p => ({ ...p, discordId: e.target.value }))} />
-                      <label className="flabel">Email IC (format @fpt.ro)</label>
-                      <input className="finput" type="email" placeholder="email@fpt.ro"
+                      <label className="flabel">Email</label>
+                      <input className="finput" type="email" placeholder="email@fplayt.ro"
                         value={reg.icEmail} onChange={e => setReg(p => ({ ...p, icEmail: e.target.value }))}
                         onKeyDown={e => e.key === 'Enter' && finishReg()} />
                     </>

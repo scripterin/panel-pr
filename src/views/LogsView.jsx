@@ -174,7 +174,7 @@ export default function LogsView({ currentUser }) {
             <input placeholder="Caută în logs..." value={search} onChange={e => setSearch(e.target.value)}
               style={{ width: '100%', background: 'var(--b2)', border: '1px solid var(--br)', borderRadius: 10, padding: '8px 14px 8px 34px', color: 'var(--t)', fontSize: 12, outline: 'none', fontFamily: 'Space Grotesk, sans-serif', boxSizing: 'border-box' }} />
           </div>
-          <div style={{ fontSize: 11, color: 'var(--t3)', whiteSpace: 'nowrap' }}>{filtered.length} intrări</div>
+          <div style={{ fontSize: 11, color: 'var(--t3)', whiteSpace: 'nowrap' }}>{filtered.length} logs</div>
           {isSef && (
             <button onClick={() => setShowModal(true)}
               style={{ background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.22)', color: '#FCA5A5', borderRadius: 9, padding: '8px 14px', fontSize: 11, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 6 }}>

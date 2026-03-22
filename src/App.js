@@ -29,27 +29,23 @@ export default function App() {
     boot();
   }, []);
 
-  if (loading) {
-    return (
-      <div style={{
-        minHeight: '100vh', display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center',
-        background: '#08060F', gap: 16,
-      }}>
-        <div style={{
-          width: 48, height: 48,
-          background: 'linear-gradient(135deg,#4C1D95,#7C3AED)',
-          borderRadius: 14, display: 'flex', alignItems: 'center',
-          justifyContent: 'center', fontFamily: 'JetBrains Mono, monospace',
-          fontWeight: 500, fontSize: 14, color: '#fff', letterSpacing: 1,
-          boxShadow: '0 8px 24px rgba(124,58,237,0.4)',
-        }}>PR</div>
-        <div style={{ color: '#5E5780', fontSize: 12, letterSpacing: '.5px' }}>
-          Se conectează la Firebase...
-        </div>
+if (loading) {
+  return (
+    <div style={{
+      minHeight: '100vh', display: 'flex', flexDirection: 'column',
+      alignItems: 'center', justifyContent: 'center',
+      background: '#08060F', gap: 16,
+    }}>
+      <img src="/logo_pr.png" alt="PR Logo" style={{
+        width: 48, height: 48, borderRadius: 14, objectFit: 'cover',
+        boxShadow: '0 8px 24px rgba(124,58,237,0.4)',
+      }} />
+      <div style={{ color: '#5E5780', fontSize: 12, letterSpacing: '.5px' }}>
+        Se conectează la Firebase...
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   if (!user) return <AuthPage onLogin={setUser} />;
   return <Panel currentUser={user} onLogout={() => { clearSession(); setUser(null); }} />;
