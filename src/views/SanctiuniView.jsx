@@ -5,6 +5,21 @@ import {
 } from 'firebase/firestore';
 import RankBadge from '../components/RankBadge';
 
+const Ico = {
+  scale:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="3" x2="12" y2="21"/><path d="M3 6l9-3 9 3"/><path d="M3 18l9 3 9-3"/><path d="M3 6l4 6-4 6"/><path d="M21 6l-4 6 4 6"/></svg>,
+  warning:<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+  fw:     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>,
+  money:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  edit:   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>,
+  trash:  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>,
+  plus:   <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>,
+  shield: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+  search: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+  active: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>,
+  total:  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>,
+  unpaid: <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>,
+};
+
 const STATUS_CONFIG = {
   'Activă':    { color: '#10B981', bg: 'rgba(16,185,129,0.12)',  border: 'rgba(16,185,129,0.3)'  },
   'Expirată':  { color: '#6B7280', bg: 'rgba(107,114,128,0.12)', border: 'rgba(107,114,128,0.3)' },
@@ -13,9 +28,9 @@ const STATUS_CONFIG = {
 };
 
 const SANCTIUNE_CONFIG = {
-  'Amendă':      { color: '#F59E0B', icon: '💰' },
-  'Avertisment': { color: '#EF4444', icon: '⚠️' },
-  'FW':          { color: '#7C3AED', icon: '🚨' },
+  'Amendă':      { color: '#F59E0B', icon: Ico.money   },
+  'Avertisment': { color: '#EF4444', icon: Ico.warning },
+  'FW':          { color: '#7C3AED', icon: Ico.fw      },
 };
 
 function getName(m) {
@@ -85,7 +100,7 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
       <div style={{ background: 'var(--b2)', border: '1px solid rgba(124,58,237,0.25)', borderRadius: 20, padding: '28px', width: 500, maxHeight: '90vh', overflowY: 'auto', boxShadow: '0 30px 80px rgba(0,0,0,0.7)', animation: 'modalIn .18s ease' }}>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 24 }}>
-          <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22 }}>⚖️</div>
+          <div style={{ width: 48, height: 48, borderRadius: 14, background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--p3)' }}>{Ico.scale}</div>
           <div>
             <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--t)' }}>Adaugă Sancțiune</div>
             <div style={{ fontSize: 11, color: 'var(--t3)' }}>Completează toate câmpurile obligatorii</div>
@@ -106,13 +121,15 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
                 <option key={m.id} value={m.id}>{getName(m)} — {m.rank}</option>
               ))}
             </select>
-            {err.memberId && <div style={{ fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>⚠️ {err.memberId}</div>}
+            {err.memberId && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>
+                <span style={{ display: 'flex' }}>{Ico.warning}</span> {err.memberId}
+              </div>
+            )}
             {selectedMember && (
               <div style={{ marginTop: 8, background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)', borderRadius: 10, padding: '10px 14px', display: 'flex', gap: 12, alignItems: 'center', justifyContent: 'space-between' }}>
                 <div>
-                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--t)', marginBottom: 3 }}>
-                    {getName(selectedMember)}
-                  </div>
+                  <div style={{ fontSize: 12, fontWeight: 700, color: 'var(--t)', marginBottom: 3 }}>{getName(selectedMember)}</div>
                   <div style={{ fontSize: 10, color: 'var(--t3)', fontFamily: 'JetBrains Mono, monospace' }}>
                     ID: {selectedMember.charId || '—'} · Callsign: {selectedMember.faction || '—'}
                   </div>
@@ -130,12 +147,12 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
                 <button key={key} onClick={() => f('sanctiune', key)} style={{
                   flex: 1, padding: '10px', borderRadius: 10, cursor: 'pointer',
                   fontFamily: 'Space Grotesk, sans-serif', fontSize: 12, fontWeight: 600,
-                  transition: 'all .2s',
+                  transition: 'all .2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
                   background: form.sanctiune === key ? cfg.color + '22' : 'var(--b3)',
                   border: `1px solid ${form.sanctiune === key ? cfg.color : 'var(--br)'}`,
                   color: form.sanctiune === key ? cfg.color : 'var(--t3)',
                 }}>
-                  {cfg.icon} {key}
+                  <span style={{ display: 'flex' }}>{cfg.icon}</span> {key}
                 </button>
               ))}
             </div>
@@ -152,7 +169,11 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
                 onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'}
                 onBlur={e => e.target.style.borderColor = err.sumaAmenzii ? 'rgba(239,68,68,0.5)' : 'var(--br)'}
               />
-              {err.sumaAmenzii && <div style={{ fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>⚠️ {err.sumaAmenzii}</div>}
+              {err.sumaAmenzii && (
+                <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>
+                  <span style={{ display: 'flex' }}>{Ico.warning}</span> {err.sumaAmenzii}
+                </div>
+              )}
             </div>
           )}
 
@@ -186,9 +207,7 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
                   background: form.status === key ? cfg.bg : 'var(--b3)',
                   border: `1px solid ${form.status === key ? cfg.border : 'var(--br)'}`,
                   color: form.status === key ? cfg.color : 'var(--t3)',
-                }}>
-                  {key}
-                </button>
+                }}>{key}</button>
               ))}
             </div>
           </div>
@@ -203,7 +222,11 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
               onFocus={e => e.target.style.borderColor = 'rgba(124,58,237,0.5)'}
               onBlur={e => e.target.style.borderColor = err.motiv ? 'rgba(239,68,68,0.5)' : 'var(--br)'}
             />
-            {err.motiv && <div style={{ fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>⚠️ {err.motiv}</div>}
+            {err.motiv && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, color: '#FCA5A5', marginTop: 4 }}>
+                <span style={{ display: 'flex' }}>{Ico.warning}</span> {err.motiv}
+              </div>
+            )}
           </div>
 
         </div>
@@ -216,10 +239,10 @@ function AddSanctiuneModal({ members, currentUser, onClose, onSave }) {
             Anulează
           </button>
           <button onClick={save}
-            style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'linear-gradient(135deg,var(--pd),var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 4px 20px rgba(124,58,237,0.3)', transition: 'opacity .2s' }}
+            style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'linear-gradient(135deg,var(--pd),var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 4px 20px rgba(124,58,237,0.3)', transition: 'opacity .2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
             onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
             onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-            ⚖️ Adaugă Sancțiune
+            <span style={{ display: 'flex' }}>{Ico.scale}</span> Adaugă Sancțiune
           </button>
         </div>
       </div>
@@ -247,9 +270,7 @@ function EditStatusModal({ sanctiune, onClose, onSave }) {
               background: status === key ? cfg.bg : 'var(--b3)',
               border: `1px solid ${status === key ? cfg.border : 'var(--br)'}`,
               color: status === key ? cfg.color : 'var(--t3)',
-            }}>
-              {key}
-            </button>
+            }}>{key}</button>
           ))}
         </div>
         <div style={{ display: 'flex', gap: 10 }}>
@@ -291,29 +312,18 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
   }, []);
 
   async function handleAdd(data) {
-    try {
-      await addDoc(collection(db, 'sanctions'), { ...data, createdAt: serverTimestamp() });
-    } catch (err) {
-      console.error('Eroare la adăugare:', err);
-    }
+    try { await addDoc(collection(db, 'sanctions'), { ...data, createdAt: serverTimestamp() }); }
+    catch (err) { console.error('Eroare la adăugare:', err); }
   }
 
   async function handleStatusUpdate(id, status) {
-    try {
-      await updateDoc(doc(db, 'sanctions', id), { status });
-      setEditTarget(null);
-    } catch (err) {
-      console.error('Eroare la actualizare:', err);
-    }
+    try { await updateDoc(doc(db, 'sanctions', id), { status }); setEditTarget(null); }
+    catch (err) { console.error('Eroare la actualizare:', err); }
   }
 
   async function handleDelete(id) {
-    try {
-      await deleteDoc(doc(db, 'sanctions', id));
-      setDeleteTarget(null);
-    } catch (err) {
-      console.error('Eroare la ștergere:', err);
-    }
+    try { await deleteDoc(doc(db, 'sanctions', id)); setDeleteTarget(null); }
+    catch (err) { console.error('Eroare la ștergere:', err); }
   }
 
   const filtered = sanctiuni
@@ -340,24 +350,17 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
   return (
     <div>
       {addModal && (
-        <AddSanctiuneModal
-          members={members}
-          currentUser={currentUser}
-          onClose={() => setAddModal(false)}
-          onSave={handleAdd}
-        />
+        <AddSanctiuneModal members={members} currentUser={currentUser} onClose={() => setAddModal(false)} onSave={handleAdd} />
       )}
       {editTarget && (
-        <EditStatusModal
-          sanctiune={editTarget}
-          onClose={() => setEditTarget(null)}
-          onSave={(status) => handleStatusUpdate(editTarget.id, status)}
-        />
+        <EditStatusModal sanctiune={editTarget} onClose={() => setEditTarget(null)} onSave={(status) => handleStatusUpdate(editTarget.id, status)} />
       )}
       {deleteTarget && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 2000, background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ background: 'var(--b2)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 20, padding: '32px 28px', width: 360, boxShadow: '0 30px 80px rgba(0,0,0,0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'modalIn .18s ease' }}>
-            <div style={{ fontSize: 32, marginBottom: 14 }}>🗑️</div>
+            <div style={{ color: '#EF4444', opacity: 0.7, marginBottom: 14 }}>
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+            </div>
             <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--t)', marginBottom: 8, textAlign: 'center' }}>Ștergi sancțiunea?</div>
             <div style={{ fontSize: 12, color: 'var(--t3)', textAlign: 'center', marginBottom: 22 }}>
               Sancțiunea pentru <span style={{ color: 'var(--t2)', fontWeight: 600 }}>{deleteTarget.memberName}</span> va fi eliminată permanent.
@@ -370,10 +373,10 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
                 Anulează
               </button>
               <button onClick={() => handleDelete(deleteTarget.id)}
-                style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }}
+                style={{ flex: 1, padding: '10px', borderRadius: 11, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}
                 onMouseEnter={e => e.currentTarget.style.opacity = '0.85'}
                 onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
-                🗑️ Șterge
+                <span style={{ display: 'flex' }}>{Ico.trash}</span> Șterge
               </button>
             </div>
           </div>
@@ -384,21 +387,25 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
       {/* ── Stat cards ── */}
       <div className="stats-grid" style={{ marginBottom: 18 }}>
         <div className="stat-card" style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+          <div className="sc-ic" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 10, width: 36, height: 36 }}>{Ico.active}</div>
           <div className="sc-label">Sancțiuni Active</div>
           <div className="sc-val" style={{ color: '#EF4444' }}>{activeCount}</div>
           <div className="sc-sub">În desfășurare</div>
         </div>
         <div className="stat-card" style={{ background: 'rgba(245,158,11,0.06)', border: '1px solid rgba(245,158,11,0.15)' }}>
+          <div className="sc-ic" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#F59E0B', background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.25)', borderRadius: 10, width: 36, height: 36 }}>{Ico.money}</div>
           <div className="sc-label">Total Amenzi</div>
           <div className="sc-val" style={{ color: '#F59E0B' }}>${totalAmezi.toLocaleString()}</div>
           <div className="sc-sub">Valoare totală</div>
         </div>
         <div className="stat-card" style={{ background: 'rgba(124,58,237,0.06)', border: '1px solid rgba(124,58,237,0.15)' }}>
+          <div className="sc-ic" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#7C3AED', background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.25)', borderRadius: 10, width: 36, height: 36 }}>{Ico.fw}</div>
           <div className="sc-label">FW-uri</div>
           <div className="sc-val" style={{ color: '#7C3AED' }}>{fwCount}</div>
           <div className="sc-sub">Fired Warnings</div>
         </div>
         <div className="stat-card" style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)' }}>
+          <div className="sc-ic" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#EF4444', background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 10, width: 36, height: 36 }}>{Ico.unpaid}</div>
           <div className="sc-label">Amenzi Neplătite</div>
           <div className="sc-val" style={{ color: '#EF4444' }}>${neplatiteSum.toLocaleString()}</div>
           <div className="sc-sub">De recuperat</div>
@@ -439,7 +446,7 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
         </div>
         {isAdj && (
           <button className="btn-p" onClick={() => setAddModal(true)} style={{ display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-            ⚖️ Adaugă Sancțiune
+            <span style={{ display: 'flex' }}>{Ico.plus}</span> Adaugă Sancțiune
           </button>
         )}
       </div>
@@ -447,12 +454,14 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
       {/* ── Tabel ── */}
       <div className="card">
         <div className="card-header">
-          <span className="card-title">⚖️ Registru Sancțiuni</span>
+          <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <span style={{ color: 'var(--p3)', display: 'flex' }}>{Ico.scale}</span> Registru Sancțiuni
+          </span>
           <span style={{ fontSize: 10, color: 'var(--t3)' }}>{filtered.length} înregistrări</span>
         </div>
         {!filtered.length ? (
           <div className="empty-st">
-            <div className="empty-ico">⚖️</div>
+            <div className="empty-ico" style={{ display: 'flex', justifyContent: 'center', color: 'var(--t3)', opacity: 0.3 }}>{Ico.shield}</div>
             <p>Nicio sancțiune găsită</p>
           </div>
         ) : (
@@ -498,7 +507,7 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
                           border: `1px solid ${tipCfg.color}40`,
                           color: tipCfg.color,
                         }}>
-                          {tipCfg.icon} {s.sanctiune}
+                          <span style={{ display: 'flex' }}>{tipCfg.icon}</span> {s.sanctiune}
                         </span>
                       </td>
                       <td style={{ color: 'var(--t3)', fontSize: 11, whiteSpace: 'nowrap' }}>{s.dataSanctionare}</td>
@@ -523,17 +532,17 @@ export default function SanctiuniView({ members, currentUser, isAdj, isSef }) {
                       {isAdj && (
                         <td style={{ whiteSpace: 'nowrap' }}>
                           <button onClick={() => setEditTarget(s)} title="Modifică status"
-                            style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', color: 'var(--p3)', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, marginRight: 4, transition: 'all .2s' }}
+                            style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)', color: 'var(--p3)', borderRadius: 7, padding: '5px 7px', cursor: 'pointer', marginRight: 4, transition: 'all .2s', display: 'inline-flex', alignItems: 'center' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'rgba(124,58,237,0.2)'}
                             onMouseLeave={e => e.currentTarget.style.background = 'rgba(124,58,237,0.1)'}>
-                            ✏️
+                            {Ico.edit}
                           </button>
                           {isSef && (
                             <button onClick={() => setDeleteTarget(s)} title="Șterge"
-                              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#FCA5A5', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, transition: 'all .2s' }}
+                              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#FCA5A5', borderRadius: 7, padding: '5px 7px', cursor: 'pointer', transition: 'all .2s', display: 'inline-flex', alignItems: 'center' }}
                               onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.2)'}
                               onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.1)'}>
-                              🗑
+                              {Ico.trash}
                             </button>
                           )}
                         </td>
