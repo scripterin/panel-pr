@@ -188,8 +188,8 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
           {/* Locked fields */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
             <LockedField label="Nume Prenume"       value={currentUser.fullName}       />
-            <LockedField label="Callsign / Faction" value={currentUser.faction || '—'} />
-            <LockedField label="ID Personaj"        value={currentUser.charId  || '—'} />
+            <LockedField label="Callsign" value={currentUser.faction || '—'} />
+            <LockedField label="ID"        value={currentUser.charId  || '—'} />
             <LockedField label="Grad"               value={currentUser.rank}           />
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
