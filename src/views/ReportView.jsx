@@ -36,7 +36,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
   const periodPromo = promotions.filter(p  => inDateRange(p.date, periodStart, periodEnd));
   const inactive    = members.filter(m => m.status !== 'activ');
 
-  const EXCLUDED_RANKS = ['Membru PR', 'Supervizor PR', 'Conducere Spital'];
+  const EXCLUDED_RANKS = ['Supervizor PR', 'Conducere Spital'];
 
   const actByMember = members
     .filter(m => !EXCLUDED_RANKS.includes(m.rank))
