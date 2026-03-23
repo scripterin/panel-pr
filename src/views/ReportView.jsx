@@ -35,7 +35,11 @@ export default function ReportView({ members, activities, warnings, promotions, 
   const periodWarn  = warnings.filter(w   => inDateRange(w.date, periodStart, periodEnd));
   const periodPromo = promotions.filter(p  => inDateRange(p.date, periodStart, periodEnd));
   const inactive    = members.filter(m => m.status !== 'activ');
+
+  const EXCLUDED_RANKS = ['Membru PR', 'Supervizor PR', 'Conducere Spital'];
+
   const actByMember = members
+    .filter(m => !EXCLUDED_RANKS.includes(m.rank))
     .map(m => ({ ...m, pActs: periodActs.filter(a => a.memberId === m.id).length }))
     .sort((a, b) => b.pActs - a.pActs);
 
@@ -119,7 +123,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
       lines.push(`${'#'.padEnd(4)}${'Nume'.padEnd(25)}${'Grad'.padEnd(20)}${'Status'.padEnd(12)}${'Perioada'.padEnd(10)}Total`);
       lines.push(dash);
       actByMember
-        .filter(m => m.rank !== 'Membru PR')
         .forEach((m, i) => {
           lines.push(
             `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${String(m.pActs).padEnd(10)}${m.activities}`
