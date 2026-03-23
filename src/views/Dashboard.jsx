@@ -102,7 +102,8 @@ export default function Dashboard({ members, activities, announcements, warnings
   const adj    = members.filter(m => m.rank === 'Adjunct PR').length;
   const mem    = members.filter(m => m.rank === 'Membru PR').length;
   const maxB   = Math.max(1, total);
-  const top    = [...members].sort((a, b) => b.activities - a.activities).slice(0, 5);
+  const EXCLUDED_RANKS = ['Supervizor PR', 'Conducere Spital'];
+  const top = [...members].filter(m => !EXCLUDED_RANKS.includes(m.rank)).sort((a, b) => b.activities - a.activities).slice(0, 5);
   const medals = ['🥇', '🥈', '🥉', '4.', '5.'];
   const pinned = announcements.filter(a => a.pinned);
 
