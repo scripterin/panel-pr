@@ -60,19 +60,19 @@ export default function AddMemberModal({ onClose, onSave, editData }) {
 
           <div className="frow" style={{ marginTop: 14, marginBottom: 0 }}>
             <div>
-              <label className="flabel">Callsign (Faction)</label>
-              <input className="finput" placeholder="ex: M-(008)"
+              <label className="flabel">Callsign</label>
+              <input className="finput" placeholder="Introdu Callsign-ul"
                 value={form.faction || ''} onChange={e => f('faction', e.target.value)} />
             </div>
             <div>
-              <label className="flabel">ID Joc (CharId)</label>
-              <input className="finput" placeholder="ex: 96873"
+              <label className="flabel">ID</label>
+              <input className="finput" placeholder="Introdu ID-ul"
                 value={form.charId || ''} onChange={e => f('charId', e.target.value)} />
             </div>
           </div>
 
           <label className="flabel" style={{ marginTop: 14 }}>Discord ID</label>
-          <input className="finput" placeholder="123456789012345678"
+          <input className="finput" placeholder="Introdu Disocrd ID"
             value={form.discord || ''} onChange={e => f('discord', e.target.value)} />
 
           <label className="flabel">Data Angajare</label>
