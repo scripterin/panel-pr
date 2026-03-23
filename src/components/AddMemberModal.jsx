@@ -46,7 +46,6 @@ export default function AddMemberModal({ onClose, onSave, editData }) {
                 <option value="Conducere Spital">Conducere Spital</option>
                 <option value="Adjunct PR">Adjunct PR</option>
                 <option value="Membru PR">Membru PR</option>
-                <option value="Aspirant PR">Aspirant PR</option>
               </select>
             </div>
             <div>

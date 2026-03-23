@@ -119,7 +119,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
       lines.push(`${'#'.padEnd(4)}${'Nume'.padEnd(25)}${'Grad'.padEnd(20)}${'Status'.padEnd(12)}${'Perioada'.padEnd(10)}Total`);
       lines.push(dash);
       actByMember
-        .filter(m => m.rank !== 'Membru PR' && m.rank !== 'Aspirant PR')
+        .filter(m => m.rank !== 'Membru PR')
         .forEach((m, i) => {
           lines.push(
             `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${String(m.pActs).padEnd(10)}${m.activities}`
@@ -128,7 +128,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
       lines.push('');
 
       lines.push(sep);
-      lines.push('Document generat automat - Departamentul de Relatii Publice - Confidential');
+      lines.push('Document generat automat - Departamentul de Relatii Publice');
       lines.push('PR SYSTEM');
       lines.push(sep);
 
