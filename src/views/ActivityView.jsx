@@ -48,7 +48,7 @@ export default function ActivityView({ members, activities, isAdj, onAddActivity
         </div>
       )}
 
-      {logModal && <LogModal members={members} onClose={() => setLogModal(false)} onSave={saveLog} />}
+      {logModal && <LogModal members={members.filter(m => !['Supervizor PR', 'Conducere Spital'].includes(m.rank))} onClose={() => setLogModal(false)} onSave={saveLog} />}
     </div>
   );
 }
