@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   collection, addDoc, onSnapshot, orderBy, query,
   serverTimestamp, doc, updateDoc,
@@ -18,6 +18,8 @@ const IcoCheck    = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="
 const IcoX        = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>;
 const IcoClock    = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>;
 const IcoList     = () => <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>;
+const IcoImage    = () => <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>;
+const IcoTrash    = () => <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
 
 /* ─── helpers ─── */
 function nowDate() {
@@ -64,25 +66,66 @@ function LockedField({ label, value }) {
 
 /* ─── Post Form Modal ─── */
 function PostFormModal({ currentUser, category, onClose, onSuccess }) {
-  const [imgurLink, setImgurLink] = useState('');
-  const [preview,   setPreview]   = useState(null);
-  const [saving,    setSaving]    = useState(false);
-  const [error,     setError]     = useState('');
+  const [preview,    setPreview]    = useState(null);   // base64 data URL
+  const [fileName,   setFileName]   = useState('');
+  const [fileSize,   setFileSize]   = useState('');
+  const [saving,     setSaving]     = useState(false);
+  const [error,      setError]      = useState('');
+  const [dragging,   setDragging]   = useState(false);
+  const fileInputRef = useRef(null);
 
-  function handleLinkChange(e) {
-    const val = e.target.value.trim();
-    setImgurLink(val);
+  const MAX_SIZE_MB = 5;
+
+  function processFile(file) {
     setError('');
-    if (val.match(/\.(jpg|jpeg|png|gif|webp)(\?.*)?$/i) || val.includes('imgur.com')) {
-      setPreview(val);
-    } else {
-      setPreview(null);
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      setError('Fișierul trebuie să fie o imagine (JPG, PNG, GIF, WEBP).');
+      return;
     }
+    if (file.size > MAX_SIZE_MB * 1024 * 1024) {
+      setError(`Imaginea este prea mare. Limita este ${MAX_SIZE_MB}MB.`);
+      return;
+    }
+
+    setFileName(file.name);
+    setFileSize((file.size / 1024).toFixed(0) + ' KB');
+
+    const reader = new FileReader();
+    reader.onload = (e) => setPreview(e.target.result);
+    reader.readAsDataURL(file);
+  }
+
+  function handleFileChange(e) {
+    processFile(e.target.files[0]);
+  }
+
+  function handleDrop(e) {
+    e.preventDefault();
+    setDragging(false);
+    processFile(e.dataTransfer.files[0]);
+  }
+
+  function handleDragOver(e) {
+    e.preventDefault();
+    setDragging(true);
+  }
+
+  function handleDragLeave() {
+    setDragging(false);
+  }
+
+  function handleRemove() {
+    setPreview(null);
+    setFileName('');
+    setFileSize('');
+    setError('');
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   async function handleSubmit() {
-    if (!imgurLink) { setError('Link-ul imgur este obligatoriu!'); return; }
-    if (!imgurLink.startsWith('http')) { setError('Link-ul trebuie să înceapă cu https://'); return; }
+    if (!preview) { setError('Te rugăm să selectezi o imagine!'); return; }
     setSaving(true);
     setError('');
     try {
@@ -95,7 +138,8 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
         rank:       currentUser.rank,
         date:       nowDate(),
         time:       nowTime(),
-        photoUrl:   imgurLink,
+        photoUrl:   preview,   // stocat ca base64
+        fileName:   fileName,
         status:     'neverificat',
         createdAt:  serverTimestamp(),
       });
@@ -122,6 +166,7 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
         boxShadow: '0 30px 80px rgba(0,0,0,0.7), var(--glow)',
         overflow: 'hidden', animation: 'modalIn .18s ease',
       }}>
+        {/* Header */}
         <div style={{
           padding: '18px 22px', borderBottom: '1px solid var(--br)',
           background: 'linear-gradient(135deg, rgba(124,58,237,0.08), transparent)',
@@ -138,9 +183,11 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
           <button onClick={onClose} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--t3)', fontSize: 20, lineHeight: 1, padding: 4 }}>×</button>
         </div>
 
+        {/* Body */}
         <div style={{ padding: '20px 22px', display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Locked fields */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-            <LockedField label="Nume Prenume"      value={currentUser.fullName}       />
+            <LockedField label="Nume Prenume"       value={currentUser.fullName}       />
             <LockedField label="Callsign / Faction" value={currentUser.faction || '—'} />
             <LockedField label="ID Personaj"        value={currentUser.charId  || '—'} />
             <LockedField label="Grad"               value={currentUser.rank}           />
@@ -150,34 +197,109 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
             <LockedField label="Ora"  value={nowTime()} />
           </div>
 
+          {/* File upload area */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
             <label style={{ fontSize: 10, color: 'var(--t3)', fontWeight: 700, letterSpacing: '.8px', textTransform: 'uppercase' }}>
-              Link Imgur <span style={{ color: '#EF4444' }}>*</span>
+              Imagine Dovadă <span style={{ color: '#EF4444' }}>*</span>
             </label>
-            <div style={{
-              fontSize: 10, color: 'var(--t3)', background: 'rgba(124,58,237,0.06)',
-              border: '1px solid rgba(124,58,237,0.15)', borderRadius: 8, padding: '7px 10px', lineHeight: 1.6,
-            }}>
-              Pași: mergi pe <strong style={{ color: 'var(--p3)' }}>imgur.com</strong> → încarcă poza → click dreapta pe imagine → <strong style={{ color: 'var(--p3)' }}>Copy image address</strong> → lipește mai jos
-            </div>
+
+            {/* Hidden file input */}
             <input
-              type="text" value={imgurLink} onChange={handleLinkChange}
-              placeholder="https://i.imgur.com/xxxxxxx.jpg"
-              style={{ padding: '10px 14px', background: 'var(--b3)', border: '1px solid var(--br)', borderRadius: 9, color: 'var(--t)', fontSize: 12, fontFamily: 'JetBrains Mono, monospace', outline: 'none', transition: 'border-color .2s' }}
-              onFocus={e => e.target.style.borderColor = 'var(--p)'}
-              onBlur={e  => e.target.style.borderColor = 'var(--br)'}
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              onChange={handleFileChange}
+              style={{ display: 'none' }}
+              id="dovada-file-input"
             />
-            {preview && (
+
+            {!preview ? (
+              /* Drop zone */
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                style={{
+                  border: `2px dashed ${dragging ? 'var(--p)' : 'var(--br2)'}`,
+                  borderRadius: 12,
+                  padding: '32px 20px',
+                  display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10,
+                  cursor: 'pointer',
+                  background: dragging ? 'rgba(124,58,237,0.08)' : 'rgba(124,58,237,0.03)',
+                  transition: 'all .2s',
+                  userSelect: 'none',
+                }}
+              >
+                <div style={{ color: dragging ? 'var(--p3)' : 'var(--t3)', transition: 'color .2s' }}>
+                  <IcoImage />
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: dragging ? 'var(--p3)' : 'var(--t2)', marginBottom: 4 }}>
+                    {dragging ? 'Eliberează pentru upload' : 'Click sau trage imaginea aici'}
+                  </div>
+                  <div style={{ fontSize: 11, color: 'var(--t3)' }}>
+                    JPG, PNG, GIF, WEBP · max {MAX_SIZE_MB}MB
+                  </div>
+                </div>
+                <div style={{
+                  marginTop: 4, padding: '7px 18px', borderRadius: 8,
+                  background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.25)',
+                  fontSize: 12, color: 'var(--p3)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  <IcoUpload /> Alege fișier
+                </div>
+              </div>
+            ) : (
+              /* Preview */
               <div style={{ position: 'relative' }}>
-                <img src={preview} alt="preview" onError={() => setPreview(null)}
-                  style={{ width: '100%', maxHeight: 180, objectFit: 'cover', borderRadius: 9, border: '1px solid var(--br2)', display: 'block' }} />
-                <div style={{ position: 'absolute', top: 6, left: 6, background: 'rgba(16,185,129,0.9)', borderRadius: 5, padding: '2px 8px', fontSize: 10, color: '#fff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <IcoCheck /> Preview
+                <img
+                  src={preview} alt="preview"
+                  style={{ width: '100%', maxHeight: 200, objectFit: 'cover', borderRadius: 10, border: '1px solid var(--br2)', display: 'block' }}
+                />
+                {/* Overlay badges */}
+                <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', gap: 6 }}>
+                  <div style={{ background: 'rgba(16,185,129,0.9)', borderRadius: 5, padding: '2px 8px', fontSize: 10, color: '#fff', fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4 }}>
+                    <IcoCheck /> Preview
+                  </div>
+                  <div style={{ background: 'rgba(0,0,0,0.65)', borderRadius: 5, padding: '2px 8px', fontSize: 10, color: '#ccc', backdropFilter: 'blur(4px)' }}>
+                    {fileSize}
+                  </div>
+                </div>
+                {/* Remove button */}
+                <button
+                  onClick={handleRemove}
+                  style={{
+                    position: 'absolute', top: 8, right: 8,
+                    background: 'rgba(239,68,68,0.85)', border: 'none', borderRadius: 6,
+                    padding: '4px 8px', cursor: 'pointer', color: '#fff',
+                    fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', gap: 4,
+                    backdropFilter: 'blur(4px)',
+                  }}
+                >
+                  <IcoTrash /> Șterge
+                </button>
+                {/* File name bar */}
+                <div style={{
+                  marginTop: 6, padding: '6px 10px', background: 'var(--b3)',
+                  borderRadius: 7, border: '1px solid var(--br)',
+                  fontSize: 11, color: 'var(--t3)', fontFamily: 'JetBrains Mono, monospace',
+                  display: 'flex', alignItems: 'center', gap: 6, overflow: 'hidden',
+                }}>
+                  <IcoImage />
+                  <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>{fileName}</span>
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--p3)', fontSize: 11, fontWeight: 600, whiteSpace: 'nowrap', padding: 0 }}
+                  >
+                    Schimbă
+                  </button>
                 </div>
               </div>
             )}
           </div>
 
+          {/* Error */}
           {error && (
             <div style={{ fontSize: 12, color: '#FCA5A5', background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', borderRadius: 8, padding: '8px 12px', display: 'flex', alignItems: 'center', gap: 6 }}>
               <IcoX /> {error}
@@ -185,13 +307,14 @@ function PostFormModal({ currentUser, category, onClose, onSuccess }) {
           )}
         </div>
 
+        {/* Footer */}
         <div style={{ padding: '0 22px 20px', display: 'flex', gap: 10 }}>
           <button onClick={onClose}
             style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'var(--b3)', border: '1px solid var(--br)', color: 'var(--t2)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }}>
             Anulează
           </button>
-          <button onClick={handleSubmit} disabled={saving}
-            style={{ flex: 2, padding: '11px', borderRadius: 11, background: saving ? 'var(--b3)' : 'linear-gradient(135deg, var(--pd), var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: saving ? 'not-allowed' : 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: '0 4px 20px rgba(124,58,237,0.3)', opacity: saving ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
+          <button onClick={handleSubmit} disabled={saving || !preview}
+            style={{ flex: 2, padding: '11px', borderRadius: 11, background: (saving || !preview) ? 'var(--b3)' : 'linear-gradient(135deg, var(--pd), var(--p))', border: '1px solid rgba(124,58,237,0.4)', color: (saving || !preview) ? 'var(--t3)' : '#fff', fontSize: 13, fontWeight: 700, cursor: (saving || !preview) ? 'not-allowed' : 'pointer', fontFamily: 'Space Grotesk, sans-serif', boxShadow: (saving || !preview) ? 'none' : '0 4px 20px rgba(124,58,237,0.3)', opacity: saving ? 0.7 : 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7 }}>
             {saving ? <><IcoClock /> Se salvează...</> : <><IcoUpload /> Postează Anunțul</>}
           </button>
         </div>
