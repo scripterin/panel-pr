@@ -3,6 +3,7 @@ import RankBadge from '../components/RankBadge';
 import { db } from '../utils/firebase';
 import { doc, updateDoc } from 'firebase/firestore';
 
+
 const STATUS_COLORS = {
   activ:    { color: '#10B981', bg: 'rgba(16,185,129,0.12)', label: 'Activ' },
   concediu: { color: '#F59E0B', bg: 'rgba(245,158,11,0.12)', label: 'Concediu' },
