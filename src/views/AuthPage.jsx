@@ -677,14 +677,14 @@ export default function AuthPage({ onLogin }) {
                       <label className="flabel">Nume + Prenume</label>
                       <input
                         className="finput"
-                        placeholder="Introdu Numele si Prenumele"
+                        placeholder="Paduraru David"
                         value={reg.charName}
                         onChange={e => setReg(p => ({ ...p, charName: e.target.value }))}
                       />
                       <label className="flabel">ID</label>
                       <input
                         className="finput"
-                        placeholder="Introdu ID-ul"
+                        placeholder="ex: 12345"
                         value={reg.charId}
                         onChange={e => setReg(p => ({ ...p, charId: e.target.value }))}
                       />
@@ -693,7 +693,7 @@ export default function AuthPage({ onLogin }) {
                         <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', color: 'var(--p3)', fontWeight: 700, fontSize: 13, pointerEvents: 'none', fontFamily: 'JetBrains Mono, monospace' }}>M-[</span>
                         <input
                           className="finput"
-                          placeholder="Introdu Callsign-ul"
+                          placeholder="102"
                           value={reg.faction}
                           onChange={e => setReg(p => ({ ...p, faction: e.target.value.replace(/\D/g, '') }))}
                           style={{ paddingLeft: 48, paddingRight: 28, marginBottom: 0 }}
@@ -708,7 +708,7 @@ export default function AuthPage({ onLogin }) {
                       <label className="flabel">Discord ID</label>
                       <input
                         className="finput"
-                        placeholder="Introdu Discord ID-ul"
+                        placeholder="ex: 123456789012345678"
                         value={reg.discordId}
                         onChange={e => setReg(p => ({ ...p, discordId: e.target.value }))}
                       />
@@ -744,7 +744,7 @@ export default function AuthPage({ onLogin }) {
                           />
                         </div>
                       </div>
-                      <label className="flabel">Număr de telefon</label>
+                      <label className="flabel">Telefon — format xxx-xxxx (opțional)</label>
                       <div style={{ position: 'relative', marginBottom: 14 }}>
                         <input
                           className="finput"
