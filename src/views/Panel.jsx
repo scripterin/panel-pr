@@ -246,22 +246,34 @@ export default function Panel({ currentUser: initialUser, onLogout }) {
               <div className="tb-sub">{todayFull()}</div>
             </div>
             <div className="tb-right">
-              {/* ── Toggle Dark/Light ── */}
-              <button
-                onClick={toggleTheme}
-                title={isDark ? 'Schimbă la Light Mode' : 'Schimbă la Dark Mode'}
-                style={{
-                  width: 36, height: 36, borderRadius: '50%',
-                  background: 'var(--b3)', border: '1px solid var(--br2)',
-                  color: 'var(--t2)', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  fontSize: 16, transition: 'all .2s', flexShrink: 0,
-                }}
-                onMouseEnter={e => { e.currentTarget.style.background = 'var(--b4)'; e.currentTarget.style.borderColor = 'var(--br3)'; e.currentTarget.style.color = 'var(--p3)'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = 'var(--b3)'; e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.color = 'var(--t2)'; }}
-              >
-                {isDark ? '💡' : '🌙'}
-              </button>
+{/* ── Toggle Dark/Light ── */}
+<button
+  onClick={toggleTheme}
+  title={isDark ? 'Schimbă la Light Mode' : 'Schimbă la Dark Mode'}
+  style={{
+    width: 36, height: 36, borderRadius: '50%',
+    background: 'var(--b3)', border: '1px solid var(--br2)',
+    color: 'var(--t2)', cursor: 'pointer',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    fontSize: 16, transition: 'all .2s', flexShrink: 0,
+  }}
+  onMouseEnter={e => { e.currentTarget.style.background = 'var(--b4)'; e.currentTarget.style.borderColor = 'var(--br3)'; e.currentTarget.style.color = 'var(--p3)'; }}
+  onMouseLeave={e => { e.currentTarget.style.background = 'var(--b3)'; e.currentTarget.style.borderColor = 'var(--br2)'; e.currentTarget.style.color = 'var(--t2)'; }}
+>
+  {isDark ? (
+    // bec (light mode)
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M9 18h6"/>
+      <path d="M10 22h4"/>
+      <path d="M2 12a10 10 0 1 1 20 0c0 4-2 6-4 8H6c-2-2-4-4-4-8z"/>
+    </svg>
+  ) : (
+    // luna (dark mode)
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3c0 .34.02.67.05 1A7 7 0 0 0 20 13.74c.33.03.66.05 1 .05z"/>
+    </svg>
+  )}
+</button>
               <div ref={profileRef} style={{ position: 'relative' }}>
                 <div onClick={() => setProfileOpen(p => !p)}>
                   <PersonIcon size={36} radius={10} avatarUrl={currentUser.avatarUrl} />
