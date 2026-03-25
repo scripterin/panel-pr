@@ -5,6 +5,23 @@ import { todayRo, getInitials, daysSince } from '../utils/helpers';
 import RankBadge      from '../components/RankBadge';
 import StatusPill     from '../components/StatusPill';
 import AddMemberModal from '../components/AddMemberModal';
+import {
+  ArrowLeft,
+  Eye,
+  Trash2,
+  AlertTriangle,
+  Shield,
+  DollarSign,
+  TrendingUp,
+  FileText,
+  Users,
+  Pencil,
+  ChevronRight,
+  ClipboardList,
+  StickyNote,
+  Scale,
+  Siren,
+} from 'lucide-react';
 
 const RANK_ORDER = ['Supervizor PR', 'Conducere Spital', 'Sef PR', 'Adjunct PR', 'Membru PR'];
 function rankIndex(rank) { const idx = RANK_ORDER.indexOf(rank); return idx === -1 ? RANK_ORDER.length : idx; }
@@ -26,7 +43,9 @@ function ConfirmDeleteModal({ memberName, onConfirm, onCancel }) {
   return (
     <div style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.7)', backdropFilter: 'blur(6px)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
       <div style={{ background: 'var(--b2)', border: '1px solid rgba(239,68,68,0.25)', borderRadius: 20, padding: '32px 28px', width: 380, boxShadow: '0 30px 80px rgba(0,0,0,0.7)', display: 'flex', flexDirection: 'column', alignItems: 'center', animation: 'modalIn .18s ease' }}>
-        <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 24, marginBottom: 18 }}>🗑️</div>
+        <div style={{ width: 56, height: 56, borderRadius: 16, background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18 }}>
+          <Trash2 size={24} color="#FCA5A5" />
+        </div>
         <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--t)', marginBottom: 10, textAlign: 'center' }}>Ștergi membrul complet?</div>
         <div style={{ fontSize: 12, color: 'var(--t3)', textAlign: 'center', lineHeight: 1.7, marginBottom: 16 }}>
           Ești pe cale să ștergi <span style={{ color: 'var(--t2)', fontWeight: 600 }}>„{memberName}"</span>.<br />
@@ -34,7 +53,9 @@ function ConfirmDeleteModal({ memberName, onConfirm, onCancel }) {
         </div>
         <div style={{ display: 'flex', gap: 10, width: '100%' }}>
           <button onClick={onCancel} style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'var(--b3)', border: '1px solid var(--br)', color: 'var(--t2)', fontSize: 13, fontWeight: 600, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--br)'} onMouseLeave={e => e.currentTarget.style.background = 'var(--b3)'}>Anulează</button>
-          <button onClick={onConfirm} style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif' }} onMouseEnter={e => e.currentTarget.style.opacity = '0.85'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>🗑️ Șterge</button>
+          <button onClick={onConfirm} style={{ flex: 1, padding: '11px', borderRadius: 11, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'Space Grotesk, sans-serif', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }} onMouseEnter={e => e.currentTarget.style.opacity = '0.85'} onMouseLeave={e => e.currentTarget.style.opacity = '1'}>
+            <Trash2 size={14} /> Șterge
+          </button>
         </div>
       </div>
       <style>{`@keyframes modalIn { from { opacity:0; transform:scale(0.93) translateY(10px); } to { opacity:1; transform:scale(1) translateY(0); } }`}</style>
@@ -135,7 +156,9 @@ export default function MembersView({
         {deleteTarget && <ConfirmDeleteModal memberName={deleteTarget.name} onConfirm={confirmDelete} onCancel={() => setDeleteTarget(null)} />}
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16, flexWrap: 'wrap' }}>
-          <button className="back-btn" onClick={() => { setLv('list'); setSelMember(null); }}>← Înapoi la Listă</button>
+          <button className="back-btn" onClick={() => { setLv('list'); setSelMember(null); }} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <ArrowLeft size={14} /> Înapoi la Listă
+          </button>
           {onViewProfile && (
             <button
               onClick={() => onViewProfile(member)}
@@ -143,7 +166,7 @@ export default function MembersView({
               onMouseEnter={e => e.currentTarget.style.background = 'rgba(147,197,253,0.2)'}
               onMouseLeave={e => e.currentTarget.style.background = 'rgba(147,197,253,0.1)'}
             >
-              👁 Vezi Profil
+              <Eye size={13} /> Vezi Profil
             </button>
           )}
         </div>
@@ -154,10 +177,26 @@ export default function MembersView({
             <div style={{ flex: 1 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
                 <h3 style={{ fontSize: 19, fontWeight: 700, letterSpacing: '-.3px' }}>{member.name}</h3>
-                {wl && <span className={`warn-badge ${wl}`}>⚠️ {mw.length} avert.</span>}
-                {msAvActive.length > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', color: '#FCA5A5' }}>⚠️ {msAvActive.length} sanc.</span>}
-                {fl && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: fl === 'fw-h' ? 'rgba(124,58,237,0.2)' : 'rgba(124,58,237,0.1)', border: `1px solid ${fl === 'fw-h' ? 'rgba(124,58,237,0.6)' : 'rgba(124,58,237,0.3)'}`, color: '#A78BFA' }}>🚨 {msFwActive.length} FW</span>}
-                {msAmActive.length > 0 && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)', color: '#FCD34D' }}>💰 {msAmActive.length} amendă</span>}
+                {wl && (
+                  <span className={`warn-badge ${wl}`} style={{ display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                    <AlertTriangle size={11} /> {mw.length} avert.
+                  </span>
+                )}
+                {msAvActive.length > 0 && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', color: '#FCA5A5' }}>
+                    <AlertTriangle size={10} /> {msAvActive.length} sanc.
+                  </span>
+                )}
+                {fl && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: fl === 'fw-h' ? 'rgba(124,58,237,0.2)' : 'rgba(124,58,237,0.1)', border: `1px solid ${fl === 'fw-h' ? 'rgba(124,58,237,0.6)' : 'rgba(124,58,237,0.3)'}`, color: '#A78BFA' }}>
+                    <Siren size={10} /> {msFwActive.length} FW
+                  </span>
+                )}
+                {msAmActive.length > 0 && (
+                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '2px 8px', borderRadius: 6, fontSize: 10, fontWeight: 700, background: 'rgba(245,158,11,0.12)', border: '1px solid rgba(245,158,11,0.3)', color: '#FCD34D' }}>
+                    <DollarSign size={10} /> {msAmActive.length} amendă
+                  </span>
+                )}
               </div>
               <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
                 <RankBadge rank={member.rank} /><StatusPill s={member.status} />
@@ -180,7 +219,12 @@ export default function MembersView({
 
         {mw.length > 0 && (
           <div className="card" style={{ marginBottom: 14 }}>
-            <div className="card-header"><span className="card-title">⚠️ Avertismente</span><span style={{ fontSize: 10, color: 'var(--t3)' }}>{mw.length} total</span></div>
+            <div className="card-header">
+              <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <AlertTriangle size={14} /> Avertismente
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--t3)' }}>{mw.length} total</span>
+            </div>
             <div style={{ padding: '10px 20px' }}>
               {mw.map((w, i) => (
                 <div key={i} style={{ background: 'rgba(239,68,68,0.06)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 8, padding: '10px 14px', marginBottom: 8, fontSize: 12, display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -195,16 +239,23 @@ export default function MembersView({
 
         {ms.length > 0 && (
           <div className="card" style={{ marginBottom: 14 }}>
-            <div className="card-header"><span className="card-title">⚖️ Sancțiuni</span><span style={{ fontSize: 10, color: 'var(--t3)' }}>{ms.length} total</span></div>
+            <div className="card-header">
+              <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <Scale size={14} /> Sancțiuni
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--t3)' }}>{ms.length} total</span>
+            </div>
             <div style={{ padding: '10px 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {ms.map((s, i) => {
                 const tipColor = s.sanctiune === 'FW' ? '#A78BFA' : s.sanctiune === 'Amendă' ? '#F59E0B' : '#EF4444';
-                const tipIcon  = s.sanctiune === 'FW' ? '🚨' : s.sanctiune === 'Amendă' ? '💰' : '⚠️';
+                const TipIcon  = s.sanctiune === 'FW' ? Siren : s.sanctiune === 'Amendă' ? DollarSign : AlertTriangle;
                 const stCfg    = STATUS_CONFIG[s.status] || {};
                 const expired  = !isActive(s);
                 return (
                   <div key={i} style={{ background: expired ? 'rgba(107,114,128,0.04)' : 'rgba(124,58,237,0.04)', border: `1px solid ${expired ? 'rgba(107,114,128,0.1)' : 'rgba(124,58,237,0.1)'}`, borderRadius: 10, padding: '12px 14px', display: 'flex', gap: 12, alignItems: 'flex-start', opacity: expired ? 0.6 : 1 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 8, background: tipColor + '18', border: `1px solid ${tipColor}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 15, flexShrink: 0 }}>{tipIcon}</div>
+                    <div style={{ width: 32, height: 32, borderRadius: 8, background: tipColor + '18', border: `1px solid ${tipColor}40`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                      <TipIcon size={15} color={tipColor} />
+                    </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                         <span style={{ fontSize: 12, fontWeight: 700, color: expired ? '#6B7280' : tipColor }}>{s.sanctiune}</span>
@@ -213,9 +264,9 @@ export default function MembersView({
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--t2)', marginBottom: 4 }}>{s.motiv}</div>
                       <div style={{ fontSize: 10, color: 'var(--t3)', display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                        <span>📅 {s.dataSanctionare}</span>
-                        {s.dataExpirare && s.dataExpirare !== '—' && <span>⏳ Expiră: {s.dataExpirare}</span>}
-                        <span>👤 {s.responsabil}</span>
+                        <span>{s.dataSanctionare}</span>
+                        {s.dataExpirare && s.dataExpirare !== '—' && <span>Expiră: {s.dataExpirare}</span>}
+                        <span>{s.responsabil}</span>
                       </div>
                     </div>
                   </div>
@@ -227,14 +278,23 @@ export default function MembersView({
 
         {mp.length > 0 && (
           <div className="card" style={{ marginBottom: 14 }}>
-            <div className="card-header"><span className="card-title">📈 Istoric Promovări</span><span style={{ fontSize: 10, color: 'var(--t3)' }}>{mp.length} modificări</span></div>
+            <div className="card-header">
+              <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <TrendingUp size={14} /> Istoric Promovări
+              </span>
+              <span style={{ fontSize: 10, color: 'var(--t3)' }}>{mp.length} modificări</span>
+            </div>
             <div style={{ padding: '10px 20px' }}>
               {[...mp].reverse().map((p, i) => (
                 <div key={i} className="promo-item">
-                  <div className="promo-icon">📈</div>
+                  <div className="promo-icon" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <TrendingUp size={14} />
+                  </div>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 12, color: 'var(--t)', display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                      <RankBadge rank={p.fromRank} /><span className="promo-arrow">→</span><RankBadge rank={p.toRank} />
+                      <RankBadge rank={p.fromRank} />
+                      <ChevronRight size={12} style={{ color: 'var(--t3)' }} />
+                      <RankBadge rank={p.toRank} />
                     </div>
                     <div style={{ fontSize: 10, color: 'var(--t3)', marginTop: 4 }}>{p.date}</div>
                   </div>
@@ -246,15 +306,27 @@ export default function MembersView({
 
         {member.notes && (
           <div className="card" style={{ marginBottom: 14 }}>
-            <div className="card-header"><span className="card-title">📝 Notițe</span></div>
+            <div className="card-header">
+              <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <StickyNote size={14} /> Notițe
+              </span>
+            </div>
             <div style={{ padding: '14px 20px', fontSize: 12, color: 'var(--t2)', lineHeight: 1.8 }}>{member.notes}</div>
           </div>
         )}
 
         <div className="card">
-          <div className="card-header"><span className="card-title">📋 Evenimente PR</span><span style={{ fontSize: 10, color: 'var(--t3)' }}>{ma.length} înregistrări</span></div>
+          <div className="card-header">
+            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <ClipboardList size={14} /> Evenimente PR
+            </span>
+            <span style={{ fontSize: 10, color: 'var(--t3)' }}>{ma.length} înregistrări</span>
+          </div>
           {!ma.length ? (
-            <div className="empty-st"><div className="empty-ico">📋</div><p>Nicio activitate</p></div>
+            <div className="empty-st">
+              <div className="empty-ico"><ClipboardList size={28} /></div>
+              <p>Nicio activitate</p>
+            </div>
           ) : (
             <table>
               <thead><tr><th>Data</th><th>Detalii</th></tr></thead>
@@ -269,9 +341,13 @@ export default function MembersView({
 
         {isAdj && (
           <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
-            <button className="btn-p" onClick={() => setEditModal(member)}>✏️ Editează</button>
+            <button className="btn-p" onClick={() => setEditModal(member)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+              <Pencil size={13} /> Editează
+            </button>
             {isSef && (
-              <button className="btn-s" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#FCA5A5', marginLeft: 'auto' }} onClick={() => setDeleteTarget({ id: member.id, name: member.name })}>🗑 Șterge cont</button>
+              <button className="btn-s" style={{ borderColor: 'rgba(239,68,68,0.3)', color: '#FCA5A5', marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6 }} onClick={() => setDeleteTarget({ id: member.id, name: member.name })}>
+                <Trash2 size={13} /> Șterge cont
+              </button>
             )}
           </div>
         )}
@@ -292,11 +368,16 @@ export default function MembersView({
 
       <div className="card">
         <div className="card-header">
-          <span className="card-title">👥 Toți Membrii</span>
+          <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <Users size={14} /> Toți Membrii
+          </span>
           <span style={{ fontSize: 10, color: 'var(--t3)' }}>{filtered.length} din {members.length}</span>
         </div>
         {!filtered.length ? (
-          <div className="empty-st"><div className="empty-ico">👤</div><p>Lista este goală</p></div>
+          <div className="empty-st">
+            <div className="empty-ico"><Users size={28} /></div>
+            <p>Lista este goală</p>
+          </div>
         ) : (
           <table>
             <thead>
@@ -325,12 +406,22 @@ export default function MembersView({
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                           <MemberAvatar member={m} size={28} radius={7} />
                           <div style={{ display: 'flex', alignItems: 'center', gap: 5, flexWrap: 'wrap' }}>
-                            <span
-                              style={{ cursor: 'default' }}
-                            >{m.name}</span>
-                            {wl && <span className={`warn-badge ${wl}`} style={{ fontSize: 9 }}>⚠️{mwc}</span>}
-                            {msc > 0 && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4, background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', color: '#FCA5A5' }}>⚠️S {msc}</span>}
-                            {fl && <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4, background: fl === 'fw-h' ? 'rgba(124,58,237,0.2)' : 'rgba(124,58,237,0.1)', border: `1px solid ${fl === 'fw-h' ? 'rgba(124,58,237,0.5)' : 'rgba(124,58,237,0.3)'}`, color: '#A78BFA' }}>🚨FW {fwc}</span>}
+                            <span style={{ cursor: 'default' }}>{m.name}</span>
+                            {wl && (
+                              <span className={`warn-badge ${wl}`} style={{ fontSize: 9, display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                                <AlertTriangle size={9} />{mwc}
+                              </span>
+                            )}
+                            {msc > 0 && (
+                              <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4, background: 'rgba(239,68,68,0.12)', border: '1px solid rgba(239,68,68,0.3)', color: '#FCA5A5', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                                <AlertTriangle size={9} />S {msc}
+                              </span>
+                            )}
+                            {fl && (
+                              <span style={{ fontSize: 9, fontWeight: 700, padding: '1px 5px', borderRadius: 4, background: fl === 'fw-h' ? 'rgba(124,58,237,0.2)' : 'rgba(124,58,237,0.1)', border: `1px solid ${fl === 'fw-h' ? 'rgba(124,58,237,0.5)' : 'rgba(124,58,237,0.3)'}`, color: '#A78BFA', display: 'inline-flex', alignItems: 'center', gap: 3 }}>
+                                <Siren size={9} />FW {fwc}
+                              </span>
+                            )}
                           </div>
                         </div>
                       </td>
@@ -344,18 +435,24 @@ export default function MembersView({
                       {isAdj && (
                         <td style={{ whiteSpace: 'nowrap' }}>
                           <button onClick={() => onViewProfile && onViewProfile(m)} title="Vezi profil"
-                            style={{ background: 'rgba(147,197,253,0.1)', border: '1px solid rgba(147,197,253,0.25)', color: '#93C5FD', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, marginRight: 4, transition: 'all .2s' }}
+                            style={{ background: 'rgba(147,197,253,0.1)', border: '1px solid rgba(147,197,253,0.25)', color: '#93C5FD', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, marginRight: 4, transition: 'all .2s', display: 'inline-flex', alignItems: 'center' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'rgba(147,197,253,0.2)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(147,197,253,0.1)'}>👁</button>
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(147,197,253,0.1)'}>
+                            <Eye size={13} />
+                          </button>
                           <button onClick={() => setEditModal(m)} title="Editează"
-                            style={{ background: 'rgba(253,230,138,0.1)', border: '1px solid rgba(253,230,138,0.25)', color: '#FDE68A', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, marginRight: 4, transition: 'all .2s' }}
+                            style={{ background: 'rgba(253,230,138,0.1)', border: '1px solid rgba(253,230,138,0.25)', color: '#FDE68A', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, marginRight: 4, transition: 'all .2s', display: 'inline-flex', alignItems: 'center' }}
                             onMouseEnter={e => e.currentTarget.style.background = 'rgba(253,230,138,0.2)'}
-                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(253,230,138,0.1)'}>✏️</button>
+                            onMouseLeave={e => e.currentTarget.style.background = 'rgba(253,230,138,0.1)'}>
+                            <Pencil size={13} />
+                          </button>
                           {isSef && (
                             <button onClick={() => setDeleteTarget({ id: m.id, name: m.name })} title="Șterge"
-                              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#FCA5A5', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, transition: 'all .2s' }}
+                              style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.25)', color: '#FCA5A5', borderRadius: 7, padding: '4px 8px', cursor: 'pointer', fontSize: 12, transition: 'all .2s', display: 'inline-flex', alignItems: 'center' }}
                               onMouseEnter={e => e.currentTarget.style.background = 'rgba(239,68,68,0.2)'}
-                              onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.1)'}>🗑</button>
+                              onMouseLeave={e => e.currentTarget.style.background = 'rgba(239,68,68,0.1)'}>
+                              <Trash2 size={13} />
+                            </button>
                           )}
                         </td>
                       )}
