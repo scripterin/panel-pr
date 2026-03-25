@@ -80,15 +80,7 @@ function ConfirmModal({ title, onConfirm, onCancel }) {
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         animation: 'modalIn .18s ease',
       }}>
-        <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 16 }}>
-          {/* SVG trash */}
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <polyline points="3 6 5 6 21 6"/>
-            <path d="M19 6l-1 14H6L5 6"/>
-            <path d="M10 11v6M14 11v6"/>
-            <path d="M9 6V4h6v2"/>
-          </svg>
-        </div>
+        <div style={{ width: 52, height: 52, borderRadius: 14, background: 'rgba(239,68,68,0.08)', border: '1px solid rgba(239,68,68,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, marginBottom: 16 }}>🗑️</div>
         <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--t)', marginBottom: 8, textAlign: 'center' }}>Ștergi evenimentul?</div>
         <div style={{ fontSize: 12, color: 'var(--t3)', textAlign: 'center', lineHeight: 1.8, marginBottom: 24 }}>
           <span style={{ color: 'var(--t2)', fontWeight: 600 }}>„{title}"</span> va fi șters{' '}
@@ -100,14 +92,8 @@ function ConfirmModal({ title, onConfirm, onCancel }) {
             Anulează
           </button>
           <button onClick={onConfirm}
-            style={{ flex: 1, padding: '10px', borderRadius: 10, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4 }}>
-            {/* SVG trash */}
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polyline points="3 6 5 6 21 6"/>
-              <path d="M19 6l-1 14H6L5 6"/>
-              <path d="M10 11v6M14 11v6"/>
-            </svg>
-            Șterge
+            style={{ flex: 1, padding: '10px', borderRadius: 10, background: 'linear-gradient(135deg,#7f1d1d,#ef4444)', border: '1px solid rgba(239,68,68,0.4)', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>
+            🗑️ Șterge
           </button>
         </div>
       </div>
