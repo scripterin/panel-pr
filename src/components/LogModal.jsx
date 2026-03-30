@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 
 export default function LogModal({ members, onClose, onSave }) {
-  const [form, setForm] = useState({ memberId: '', desc: '' });
+  const [form, setForm] = useState({ memberId: '', date: '' });
   const [err, setErr] = useState('');
 
   function save() {
-    if (!form.memberId || !form.desc.trim()) {
-      setErr('Selectează membrul și completează detaliile!');
+    if (!form.memberId || !form.date) {
+      setErr('Selectează membrul și completează data!');
       return;
     }
-    onSave(form);
+    const [y, mo, d] = form.date.split('-');
+    onSave({ memberId: form.memberId, date: `${d}.${mo}.${y}` });
     onClose();
   }
 
@@ -27,13 +28,12 @@ export default function LogModal({ members, onClose, onSave }) {
             <option value="">— Selectează Membru —</option>
             {members.map(m => <option key={m.id} value={m.id}>{m.name}</option>)}
           </select>
-          <label className="flabel">Detalii Eveniment PR</label>
-          <textarea
-            className="finput" rows="4"
-            placeholder="Descrie evenimentul PR..."
-            value={form.desc}
-            onChange={e => setForm(p => ({ ...p, desc: e.target.value }))}
-            style={{ resize: 'none', marginBottom: 0 }}
+          <label className="flabel">Data Evenimentului</label>
+          <input
+            type="date"
+            className="finput"
+            value={form.date}
+            onChange={e => setForm(p => ({ ...p, date: e.target.value }))}
           />
         </div>
         <div className="mf">
