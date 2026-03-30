@@ -5,7 +5,7 @@ import { inDateRange } from '../utils/helpers';
 
 // ── SVG Icons ──────────────────────────────────────────
 const IcoCalendar = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>;
-const IcoWarning  = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
+const IcoWarning  = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>;
 const IcoTrendUp  = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>;
 const IcoUserOff  = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="17" y1="11" x2="23" y2="17"/><line x1="23" y1="11" x2="17" y2="17"/></svg>;
 const IcoChart    = () => <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>;
@@ -120,14 +120,13 @@ export default function ReportView({ members, activities, warnings, promotions, 
 
       lines.push('EVENIMENTE MEMBRI - PERIOADA CURENTA');
       lines.push(dash);
-      lines.push(`${'#'.padEnd(4)}${'Nume'.padEnd(25)}${'Grad'.padEnd(20)}${'Status'.padEnd(12)}${'Perioada'.padEnd(10)}Total`);
+      lines.push(`${'#'.padEnd(4)}${'Nume'.padEnd(25)}${'Grad'.padEnd(20)}${'Status'.padEnd(12)}Evenimente`);
       lines.push(dash);
-      actByMember
-        .forEach((m, i) => {
-          lines.push(
-            `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${String(m.pActs).padEnd(10)}${m.activities}`
-          );
-        });
+      actByMember.forEach((m, i) => {
+        lines.push(
+          `${String(i + 1).padEnd(4)}${m.name.padEnd(25)}${m.rank.padEnd(20)}${m.status.padEnd(12)}${m.pActs}`
+        );
+      });
       lines.push('');
 
       lines.push(sep);
@@ -277,7 +276,7 @@ export default function ReportView({ members, activities, warnings, promotions, 
         </div>
         <table>
           <thead>
-            <tr><th>#</th><th>Nume</th><th>Grad</th><th>Status</th><th>Evenimente Perioadă</th><th>Total</th></tr>
+            <tr><th>#</th><th>Nume</th><th>Grad</th><th>Status</th><th>Evenimente Perioadă</th></tr>
           </thead>
           <tbody>
             {actByMember.map((m, i) => (
@@ -287,7 +286,6 @@ export default function ReportView({ members, activities, warnings, promotions, 
                 <td><RankBadge rank={m.rank} /></td>
                 <td><StatusPill s={m.status} /></td>
                 <td style={{ color: m.pActs > 0 ? 'var(--p3)' : 'var(--t3)', fontWeight: 700 }}>{m.pActs}</td>
-                <td style={{ color: 'var(--t2)' }}>{m.activities}</td>
               </tr>
             ))}
           </tbody>
