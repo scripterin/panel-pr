@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { setOne, COL } from '../utils/storage';
 
 // ─── DISCORD WEBHOOK ─────────────────────────────────────────────────────────
-const DISCORD_WEBHOOK = 'https://discord.com/api/webhooks/1483106104778035334/n3B3H21LUQJgReL9h5D91QoHCacewCwolQ5qKIbwrrLOXB4LzTCD8M5FwchYoLjVmqLn';
+const DISCORD_WEBHOOK = '';
 
 async function sendDiscordNotification(ev) {
   try {
