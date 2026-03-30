@@ -9,7 +9,8 @@ import AddMemberModal from '../components/AddMemberModal';
 const RANK_ORDER = ['Supervizor PR', 'Conducere Spital', 'Sef PR', 'Adjunct PR', 'Membru PR'];
 function rankIndex(rank) { const idx = RANK_ORDER.indexOf(rank); return idx === -1 ? RANK_ORDER.length : idx; }
 
-// ── Inline SVG icons (zero dependencies) ──
+const EXCLUDED_DATE_RANKS = ['Supervizor PR', 'Conducere Spital'];
+
 const IcoTrash     = ({ size = 14 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>;
 const IcoEye       = ({ size = 13 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>;
 const IcoPencil    = ({ size = 13 }) => <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>;
@@ -133,6 +134,7 @@ export default function MembersView({
 
   // ── DETAIL VIEW ──
   if (lv === 'detail' && member) {
+    const isExcluded = EXCLUDED_DATE_RANKS.includes(member.rank);
     const ma   = activities.filter(a => String(a.memberId) === String(member.id));
     const mw   = warnings.filter(w   => String(w.memberId) === String(member.id));
     const mp   = promotions.filter(p  => String(p.memberId) === String(member.id));
@@ -199,18 +201,29 @@ export default function MembersView({
                 <RankBadge rank={member.rank} /><StatusPill s={member.status} />
               </div>
               <div style={{ fontSize: 11, color: 'var(--t3)' }}>
-                Discord id: {member.discord || '—'} · Angajat: {member.date}
+                Discord id: {member.discord || '—'} · Angajat: {isExcluded ? '—' : member.date}
                 {member.charId  ? ' · ID: '       + member.charId  : ''}
                 {member.faction ? ' · Callsign: ' + member.faction : ''}
               </div>
             </div>
           </div>
 
-          <div className="mp-stats" style={{ gridTemplateColumns: 'repeat(4, 1fr)' }}>
-            <div className="mp-stat"><div className="mp-sv">{member.activities}</div><div className="mp-sl">Evenimente</div></div>
-            <div className="mp-stat"><div className="mp-sv">{daysSince(member.date)}</div><div className="mp-sl">Zile</div></div>
-            <div className="mp-stat"><div className="mp-sv" style={{ color: msFwActive.length > 0 ? '#A78BFA' : 'var(--green)' }}>{msFwActive.length}</div><div className="mp-sl">FW-uri</div></div>
-            <div className="mp-stat"><div className="mp-sv" style={{ color: mw.length > 2 ? 'var(--red)' : mw.length > 0 ? 'var(--amber)' : 'var(--green)' }}>{mw.length}</div><div className="mp-sl">Avertismente</div></div>
+          {/* Stats — fără Evenimente pentru gradele excluse */}
+          <div className="mp-stats" style={{ gridTemplateColumns: isExcluded ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)' }}>
+            {!isExcluded && (
+              <div className="mp-stat">
+                <div className="mp-sv">{daysSince(member.date)}</div>
+                <div className="mp-sl">Zile</div>
+              </div>
+            )}
+            <div className="mp-stat">
+              <div className="mp-sv" style={{ color: msFwActive.length > 0 ? '#A78BFA' : 'var(--green)' }}>{msFwActive.length}</div>
+              <div className="mp-sl">FW-uri</div>
+            </div>
+            <div className="mp-stat">
+              <div className="mp-sv" style={{ color: mw.length > 2 ? 'var(--red)' : mw.length > 0 ? 'var(--amber)' : 'var(--green)' }}>{mw.length}</div>
+              <div className="mp-sl">Avertismente</div>
+            </div>
           </div>
         </div>
 
@@ -304,28 +317,6 @@ export default function MembersView({
           </div>
         )}
 
-        <div className="card">
-          <div className="card-header">
-            <span className="card-title" style={{ display: 'flex', alignItems: 'center', gap: 6 }}><IcoClipboard /> Evenimente PR</span>
-            <span style={{ fontSize: 10, color: 'var(--t3)' }}>{ma.length} înregistrări</span>
-          </div>
-          {!ma.length ? (
-            <div className="empty-st">
-              <div className="empty-ico" style={{ display: 'flex', justifyContent: 'center' }}><IcoClipboard size={28} /></div>
-              <p>Nicio activitate</p>
-            </div>
-          ) : (
-            <table>
-              <thead><tr><th>Data</th><th>Detalii</th></tr></thead>
-              <tbody>
-                {[...ma].reverse().map((a, i) => (
-                  <tr key={i}><td style={{ color: 'var(--t3)', fontSize: 10, whiteSpace: 'nowrap', width: 90 }}>{a.date}</td><td style={{ color: 'var(--t2)' }}>{a.desc}</td></tr>
-                ))}
-              </tbody>
-            </table>
-          )}
-        </div>
-
         {isAdj && (
           <div style={{ display: 'flex', gap: 10, marginTop: 16, flexWrap: 'wrap' }}>
             <button className="btn-p" onClick={() => setEditModal(member)} style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -369,12 +360,13 @@ export default function MembersView({
           <table>
             <thead>
               <tr>
-                <th>Nume</th><th>Grad</th><th>Status</th><th>Callsign</th><th>ID</th><th>Discord ID</th><th>Angajat</th><th>Evenimente</th>
+                <th>Nume</th><th>Grad</th><th>Status</th><th>Callsign</th><th>ID</th><th>Discord ID</th><th>Angajat</th>
                 {isAdj && <th>Acțiuni</th>}
               </tr>
             </thead>
             <tbody>
               {filtered.map((m, idx) => {
+                const isExcluded = EXCLUDED_DATE_RANKS.includes(m.rank);
                 const mwc      = warnings.filter(w => String(w.memberId) === String(m.id)).length;
                 const msc      = sanctiuni.filter(s => String(s.memberId) === String(m.id) && s.sanctiune === 'Avertisment' && isActive(s)).length;
                 const fwc      = sanctiuni.filter(s => String(s.memberId) === String(m.id) && s.sanctiune === 'FW' && isActive(s)).length;
@@ -386,7 +378,7 @@ export default function MembersView({
                 return (
                   <React.Fragment key={m.id}>
                     {showSep && (
-                      <tr><td colSpan={isAdj ? 9 : 8} style={{ padding: '2px 0', background: 'transparent' }}><div style={{ height: 1, background: 'rgba(124,58,237,0.12)', margin: '2px 0' }} /></td></tr>
+                      <tr><td colSpan={isAdj ? 8 : 7} style={{ padding: '2px 0', background: 'transparent' }}><div style={{ height: 1, background: 'rgba(124,58,237,0.12)', margin: '2px 0' }} /></td></tr>
                     )}
                     <tr>
                       <td className="nm">
@@ -417,8 +409,9 @@ export default function MembersView({
                       <td style={{ color: 'var(--p3)', fontSize: 11, fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap' }}>{m.faction || <span style={{ color: 'var(--t3)' }}>—</span>}</td>
                       <td style={{ color: 'var(--t2)', fontSize: 11, fontFamily: 'JetBrains Mono, monospace', whiteSpace: 'nowrap' }}>{m.charId || <span style={{ color: 'var(--t3)' }}>—</span>}</td>
                       <td style={{ color: 'var(--t3)', fontSize: 10, fontFamily: 'JetBrains Mono' }}>{m.discord || '—'}</td>
-                      <td style={{ color: 'var(--t3)' }}>{m.date}</td>
-                      <td style={{ color: 'var(--p3)', fontWeight: 700 }}>{m.activities}</td>
+                      <td style={{ color: 'var(--t3)' }}>
+                        {isExcluded ? <span style={{ color: 'var(--t3)' }}>—</span> : m.date}
+                      </td>
                       {isAdj && (
                         <td style={{ whiteSpace: 'nowrap' }}>
                           <button onClick={() => onViewProfile && onViewProfile(m)} title="Vezi profil"
