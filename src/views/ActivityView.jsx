@@ -58,22 +58,22 @@ export default function ActivityView({ members, activities, isAdj, onAddActivity
               <span className="modal-title">Adaugă Eveniment PR</span>
               <button className="close-btn" onClick={() => setModal(false)}>×</button>
             </div>
-            <div className="modal-body">
-              <label>Membru</label>
-              <select value={form.memberId} onChange={e => setForm(f => ({ ...f, memberId: e.target.value }))}>
-                <option value="">— selectează —</option>
-                {members
-                  .filter(m => !['Supervizor PR', 'Conducere Spital'].includes(m.rank))
-                  .map(m => <option key={m.id} value={m.id}>{m.name}</option>)
-                }
-              </select>
-              <label>Data evenimentului</label>
-              <input
-                type="date"
-                value={form.date}
-                onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
-              />
-            </div>
+<div className="modal-body">
+  <label style={{ display: 'block', marginBottom: 4 }}>Membru</label>
+  <select value={form.memberId} onChange={e => setForm(f => ({ ...f, memberId: e.target.value }))}>
+    <option value="">— selectează —</option>
+    {members
+      .filter(m => !['Supervizor PR', 'Conducere Spital'].includes(m.rank))
+      .map(m => <option key={m.id} value={m.id}>{m.name}</option>)
+    }
+  </select>
+  <label style={{ display: 'block', margin: '12px 0 4px' }}>Data evenimentului</label>
+  <input
+    type="date"
+    value={form.date}
+    onChange={e => setForm(f => ({ ...f, date: e.target.value }))}
+  />
+</div>
             <div className="modal-footer">
               <button className="btn-s" onClick={() => setModal(false)}>Anulează</button>
               <button className="btn-p" onClick={saveLog} disabled={!form.memberId || !form.date}>Salvează</button>
