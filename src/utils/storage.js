@@ -15,8 +15,9 @@ export const COL = {
   promotions:    'promotions',
   logs:          'logs',
   events:        'events',
-  infos:         'infos', 
+  infos:         'infos',
   config:        'config',
+  whitelist:     'whitelist',   // NOU — autentificare Discord
 };
 
 export const DC = [
