@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { COL, getAll, setOne, updateOne, getSession, setSession } from '../utils/storage';
 import { addLog } from '../utils/logger';
 
-const DISCORD_CLIENT_ID  = 'PUNE_CLIENT_ID_AICI';
+const DISCORD_CLIENT_ID  = '1479877035919937607';
 const DISCORD_REDIRECT   = window.location.hostname === 'localhost'
   ? 'http://localhost:3000/auth/callback'
   : 'https://panel-pr.vercel.app/auth/callback';
